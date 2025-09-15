@@ -5,7 +5,7 @@ import com.russhwolf.settings.get
 import com.russhwolf.settings.set
 import kotlinx.serialization.json.Json
 import org.pascal.ecommerce.createSettings
-import org.pascal.ecommerce.domain.model.BaseResponse
+import org.pascal.ecommerce.data.remote.dtos.BaseResponse
 
 object PrefLogin {
     private const val IS_LOGIN = "is_login"

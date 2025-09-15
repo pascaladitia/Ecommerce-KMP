@@ -20,6 +20,7 @@ val clientKtorApi = HttpClient {
             isLenient = true
             ignoreUnknownKeys = true
             explicitNulls = false
+            coerceInputValues = true
         })
     }
 

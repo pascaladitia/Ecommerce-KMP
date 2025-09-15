@@ -1,7 +1,6 @@
-package org.pascal.ecommerce.data.local
+package org.pascal.ecommerce.data.local.repository
 
 import org.pascal.ecommerce.data.local.entity.ProfileEntity
-
 
 interface LocalRepositoryImpl {
     suspend fun getProfileById(id: Long): ProfileEntity?

@@ -28,8 +28,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +56,7 @@ import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import ecommerce_kmp.composeapp.generated.resources.Res
+import ecommerce_kmp.composeapp.generated.resources.close
 import ecommerce_kmp.composeapp.generated.resources.cyclone
 import ecommerce_kmp.composeapp.generated.resources.ic_logo
 import kotlinx.coroutines.delay
@@ -71,18 +72,19 @@ import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
 import org.pascal.ecommerce.presentation.component.form.FormEmailComponent
 import org.pascal.ecommerce.presentation.component.form.FormPasswordComponent
 import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
-import org.pascal.ecommerce.utils.UiState
+import org.pascal.ecommerce.presentation.screen.login.state.LocalLoginEvent
+import org.pascal.ecommerce.utils.base.checkChannelValue
 
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier,
     paddingValues: PaddingValues,
     viewModel: LoginViewModel = koinInject<LoginViewModel>(),
     onLogin: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val event = LocalLoginEvent.current
 
-    val loginState by viewModel.loginState.collectAsState()
+    val loginEvent = remember { viewModel.loginEvent }
 
     var showLoading by remember { mutableStateOf(false) }
     var isDialogVisible by remember { mutableIntStateOf(0) }
@@ -106,63 +108,59 @@ fun LoginScreen(
         DIALOG_ERROR -> {
             ShowDialog(
                 message = errorMessage,
-                textButton = stringResource(Res.string.cyclone),
+                textButton = stringResource(Res.string.close),
                 color = MaterialTheme.colorScheme.primary
             ) {
                 isDialogVisible = DIALOG_DISSMISS
-                viewModel.resetDialog()
             }
         }
     }
 
-    LoginContent(
-        isContentVisible = isContentVisible,
-        onLogin = { user, password ->
-            coroutineScope.launch {
-                viewModel.exeLogin(user, password)
-            }
-        }
-    )
-
-    LaunchedEffect(loginState) {
-        when (loginState) {
-            is UiState.Empty -> {}
-            is UiState.Loading -> {
-                showLoading = true
-            }
-
-            is UiState.Error -> {
+    LaunchedEffect(Unit) {
+        loginEvent.checkChannelValue(
+            onLoading = { showLoading = true },
+            onSuccess = {
                 showLoading = false
 
-                val error = loginState as UiState.Error
-                errorMessage = error.message
-                if (errorMessage.isNotBlank()) isDialogVisible = DIALOG_ERROR
-            }
-
-            is UiState.Success -> {
-                showLoading = false
-
-                val success = (loginState as UiState.Success).data
-                if (success) {
-                    isContentVisible = false
-                    delay(500)
-                    onLogin()
+                if (it) {
+                    coroutineScope.launch {
+                        isContentVisible = false
+                        delay(500)
+                        onLogin()
+                    }
                 }
+            },
+            onFailure = { _, msg ->
+                showLoading = false
+                errorMessage = msg
+                isDialogVisible = DIALOG_ERROR
             }
-        }
+        )
     }
 
     if (showLoading) {
         LoadingScreen()
+    }
+
+    CompositionLocalProvider(
+        LocalLoginEvent provides event.copy(
+            onLogin = { user, password ->
+                coroutineScope.launch {
+                    viewModel.exeLogin(user, password)
+                }
+            },
+        )
+    ) {
+        LoginContent(isContentVisible = isContentVisible)
     }
 }
 
 @Composable
 fun LoginContent(
     modifier: Modifier = Modifier,
-    isContentVisible: Boolean = true,
-    onLogin: (String, String) -> Unit
+    isContentVisible: Boolean = true
 ) {
+    val event = LocalLoginEvent.current
     var user by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -289,7 +287,7 @@ fun LoginContent(
                     }
 
                     if (user.isNotBlank() && password.isNotBlank()) {
-                        onLogin(user, password)
+                        event.onLogin(user, password)
                         keyboardController?.hide()
                     }
                 }
@@ -307,7 +305,7 @@ fun LoginContent(
                     }
 
                     if (user.isNotBlank() && password.isNotBlank()) {
-                        onLogin(user, password)
+                        event.onLogin(user, password)
                         keyboardController?.hide()
                     }
                 }

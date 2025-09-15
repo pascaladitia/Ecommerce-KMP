@@ -1,4 +1,4 @@
-package org.pascal.ecommerce.domain.model
+package org.pascal.ecommerce.data.remote.dtos
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
