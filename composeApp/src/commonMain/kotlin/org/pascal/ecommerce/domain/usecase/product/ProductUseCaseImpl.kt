@@ -1,4 +1,4 @@
-package org.pascal.ecommerce.domain.usecase
+package org.pascal.ecommerce.domain.usecase.product
 
 import kotlinx.coroutines.flow.Flow
 import org.pascal.ecommerce.domain.model.BaseProduct

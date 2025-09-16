@@ -2,7 +2,7 @@ package org.pascal.ecommerce.data.local.repository.profile
 
 import org.pascal.ecommerce.data.local.entity.ProfileEntity
 import org.koin.core.annotation.Single
-import org.pascal.ecommerce.data.local.AppDatabase
+import org.pascal.ecommerce.data.local.database.AppDatabase
 
 @Single
 class ProfileLocalRepository(

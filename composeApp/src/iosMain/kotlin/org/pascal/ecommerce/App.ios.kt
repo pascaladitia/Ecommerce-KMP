@@ -5,7 +5,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.room.Room
-import org.pascal.ecommerce.data.local.AppDatabase
+import org.pascal.ecommerce.data.local.database.AppDatabase
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.Settings
 import kotlinx.cinterop.ExperimentalForeignApi

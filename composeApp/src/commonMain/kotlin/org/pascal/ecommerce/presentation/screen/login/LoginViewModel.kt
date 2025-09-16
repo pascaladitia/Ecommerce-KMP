@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.pascal.ecommerce.data.preferences.PrefLogin
 import org.pascal.ecommerce.domain.model.BaseProduct
-import org.pascal.ecommerce.domain.usecase.ProductUseCase
+import org.pascal.ecommerce.domain.usecase.product.ProductUseCase
 import org.pascal.ecommerce.utils.base.EventAction
 import org.pascal.ecommerce.utils.base.UiState
 import org.pascal.ecommerce.utils.base.UiState.Companion.default

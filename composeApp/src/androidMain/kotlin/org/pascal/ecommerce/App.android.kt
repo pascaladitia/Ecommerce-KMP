@@ -9,7 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
@@ -19,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.logger.Level
-import org.pascal.ecommerce.data.local.AppDatabase
+import org.pascal.ecommerce.data.local.database.AppDatabase
 import org.pascal.ecommerce.di.initKoin
 
 class AppActivity : ComponentActivity() {
