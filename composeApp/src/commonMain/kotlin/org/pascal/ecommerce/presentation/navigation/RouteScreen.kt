@@ -54,7 +54,6 @@ fun RouteScreen(
             }
             composable(route = Screen.LoginScreen.route) {
                 LoginScreen(
-                    paddingValues = paddingValues,
                     onLogin = {
                         navController.navigate(Screen.HomeScreen.route) {
                             popUpTo(Screen.LoginScreen.route) {

@@ -13,7 +13,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.pascal.ecommerce.utils.Constant.TIMEOUT
 
-val clientKtorApi = HttpClient {
+val client = HttpClient {
     install(ContentNegotiation) {
         json(Json {
             prettyPrint = true

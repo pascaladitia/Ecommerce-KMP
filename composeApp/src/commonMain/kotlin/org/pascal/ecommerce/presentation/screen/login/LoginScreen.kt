@@ -10,10 +10,11 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,8 +24,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +45,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
@@ -56,13 +62,15 @@ import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import ecommerce_kmp.composeapp.generated.resources.Res
+import ecommerce_kmp.composeapp.generated.resources.bgg_orange
 import ecommerce_kmp.composeapp.generated.resources.close
-import ecommerce_kmp.composeapp.generated.resources.cyclone
-import ecommerce_kmp.composeapp.generated.resources.ic_logo
+import ecommerce_kmp.composeapp.generated.resources.google_logo
+import ecommerce_kmp.composeapp.generated.resources.logo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.pascal.ecommerce.PlatformColors
 import org.pascal.ecommerce.presentation.component.button.ButtonComponent
@@ -73,11 +81,11 @@ import org.pascal.ecommerce.presentation.component.form.FormEmailComponent
 import org.pascal.ecommerce.presentation.component.form.FormPasswordComponent
 import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
 import org.pascal.ecommerce.presentation.screen.login.state.LocalLoginEvent
+import org.pascal.ecommerce.theme.AppTheme
 import org.pascal.ecommerce.utils.base.checkChannelValue
 
 @Composable
 fun LoginScreen(
-    paddingValues: PaddingValues,
     viewModel: LoginViewModel = koinInject<LoginViewModel>(),
     onLogin: () -> Unit
 ) {
@@ -185,14 +193,14 @@ fun LoginContent(
 
         Box(
             modifier = Modifier
-                .height(400.dp)
+                .height(380.dp)
                 .constrainAs(imageBackground) {
                     top.linkTo(parent.top)
 
                 }
         ) {
             Image(
-                painter = painterResource(Res.drawable.ic_logo),
+                painter = painterResource(Res.drawable.bgg_orange),
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
@@ -217,16 +225,19 @@ fun LoginContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(Res.drawable.ic_logo),
+                    painter = painterResource(Res.drawable.logo),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(40.dp)
+                        .background(Color.White, RoundedCornerShape(16.dp))
+                        .padding(4.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .size(36.dp)
                 )
 
                 Spacer(Modifier.width(8.dp))
 
                 Text(
-                    text = "KMP Project",
+                    text = "My Ecommerce",
                     style = MaterialTheme.typography.headlineMedium.copy(
                         color = MaterialTheme.colorScheme.background
                     )
@@ -292,7 +303,7 @@ fun LoginContent(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(17.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 ButtonComponent(
                     text = "Log In"
@@ -310,7 +321,52 @@ fun LoginContent(
                     }
                 }
 
+                Spacer(modifier = Modifier.height(16.dp))
 
+                Button(
+                    onClick = { event.onGoogle() },
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(Color.Red),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(height = 55.dp, width = 150.dp)
+
+                ) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+
+                    ) {
+                        Image(
+                            painter = painterResource(Res.drawable.google_logo),
+                            null,
+                            modifier = Modifier.size(15.dp),
+                            colorFilter = ColorFilter.tint(White)
+                        )
+                        Text(
+                            text = "Google",
+                            modifier = Modifier.padding(start = 8.dp),
+                            fontSize = 17.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(CircleShape)
+                        .clickable { event.onRegister() },
+                    text = "Belum punya akun? Register disini!",
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        color = MaterialTheme.colorScheme.primary
+                    ),
+                    textAlign = TextAlign.Center
+                )
             }
         }
 
@@ -332,7 +388,7 @@ fun LoginContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "KMP Project",
+                    text = "My Ecommerce",
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 12.sp
@@ -350,5 +406,13 @@ fun LoginContent(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoginPreview() {
+    AppTheme {
+        LoginContent()
     }
 }

@@ -4,7 +4,13 @@ import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
+import org.pascal.ecommerce.data.local.dao.CartDao
+import org.pascal.ecommerce.data.local.dao.FavoriteDao
+import org.pascal.ecommerce.data.local.dao.ProductDao
 import org.pascal.ecommerce.data.local.dao.ProfileDao
+import org.pascal.ecommerce.data.local.entity.CartEntity
+import org.pascal.ecommerce.data.local.entity.FavoriteEntity
+import org.pascal.ecommerce.data.local.entity.ProductEntity
 import org.pascal.ecommerce.data.local.entity.ProfileEntity
 
 @ConstructedBy(TestDatabaseConstructor::class)

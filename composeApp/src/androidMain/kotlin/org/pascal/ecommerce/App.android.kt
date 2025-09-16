@@ -1,5 +1,6 @@
 package org.pascal.ecommerce
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -21,7 +22,7 @@ import org.koin.core.logger.Level
 import org.pascal.ecommerce.data.local.AppDatabase
 import org.pascal.ecommerce.di.initKoin
 
-class AppActivity : FragmentActivity() {
+class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -50,6 +51,7 @@ actual fun getDatabaseBuilder(): AppDatabase {
         .build()
 }
 
+@SuppressLint("ContextCastToActivity")
 @Composable
 actual fun PlatformColors(statusBarColor: Color, navBarColor: Color){
     val activity = LocalContext.current as ComponentActivity

@@ -8,26 +8,24 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.pascal.ecommerce.data.preferences.PrefLogin
-import org.pascal.ecommerce.data.repository.BaseRepository
-import org.pascal.ecommerce.domain.model.BaseModel
-import org.pascal.ecommerce.domain.usecase.BaseUseCase
+import org.pascal.ecommerce.domain.model.BaseProduct
+import org.pascal.ecommerce.domain.usecase.ProductUseCase
 import org.pascal.ecommerce.utils.base.EventAction
 import org.pascal.ecommerce.utils.base.UiState
 import org.pascal.ecommerce.utils.base.UiState.Companion.default
-import org.pascal.ecommerce.utils.base.sendEmpty
 import org.pascal.ecommerce.utils.base.sendFailure
 import org.pascal.ecommerce.utils.base.sendLoading
 import org.pascal.ecommerce.utils.base.sendSuccess
 
 class LoginViewModel(
-    private val baseUseCase: BaseUseCase,
+    private val productUseCase: ProductUseCase,
 ) : ViewModel() {
 
     private val _loginEvent = Channel<EventAction<Boolean>>()
     val loginEvent = _loginEvent
 
-    private val _postApiState = MutableStateFlow<UiState<BaseModel>>(default())
-    val postApiState: StateFlow<UiState<BaseModel>> = _postApiState
+    private val _postApiState = MutableStateFlow<UiState<BaseProduct>>(default())
+    val postApiState: StateFlow<UiState<BaseProduct>> = _postApiState
 
     suspend fun exeLogin(username: String, password: String) {
         _loginEvent.sendLoading()
@@ -44,7 +42,7 @@ class LoginViewModel(
         viewModelScope.launch {
             _postApiState.value = UiState.loading()
 
-            baseUseCase.postApi("")
+            productUseCase.getProductByCategory("")
                 .catch {
                     _postApiState.value = UiState.fail(it, it.message)
                 }.collect {

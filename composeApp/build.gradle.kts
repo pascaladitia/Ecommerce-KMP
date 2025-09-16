@@ -82,7 +82,6 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
 
-
             implementation(libs.koin.android)
             implementation(libs.androidx.preference.ktx)
             implementation(libs.room.runtime.android)
@@ -120,7 +119,7 @@ dependencies {
 buildkonfig {
     packageName = "org.pascal.ecommerce"
     defaultConfigs {
-        buildConfigField(FieldSpec.Type.STRING, "BASE_URL", "https://test")
+        buildConfigField(FieldSpec.Type.STRING, "BASE_URL", "https://dummyjson.com")
     }
 }
 

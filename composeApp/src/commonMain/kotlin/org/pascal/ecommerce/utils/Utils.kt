@@ -38,16 +38,6 @@ fun reFormatDate(date: String?): LocalDate? {
     }
 }
 
-fun extractRTRW(inputString: String?): Pair<String, String> {
-    if (inputString.isNullOrBlank()) {
-        return "-" to "-"
-    }
-    val parts = inputString.split("/")
-    val firstPart = parts.getOrNull(0) ?: "-"
-    val secondPart = parts.getOrNull(1) ?: "-"
-    return firstPart to secondPart
-}
-
 @OptIn(ExperimentalTime::class)
 fun getCurrentDate(): String {
     return kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString()

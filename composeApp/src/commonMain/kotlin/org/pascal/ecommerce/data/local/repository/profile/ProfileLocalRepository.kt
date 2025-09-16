@@ -1,13 +1,13 @@
-package org.pascal.ecommerce.data.local.repository
+package org.pascal.ecommerce.data.local.repository.profile
 
 import org.pascal.ecommerce.data.local.entity.ProfileEntity
 import org.koin.core.annotation.Single
 import org.pascal.ecommerce.data.local.AppDatabase
 
 @Single
-class LocalRepository(
+class ProfileLocalRepository(
     private val database: AppDatabase,
-) : LocalRepositoryImpl {
+) : ProfileLocalRepositoryImpl {
 
     override suspend fun getProfileById(id: Long): ProfileEntity? {
         return database.profileDao().getProfileById(id)

@@ -1,0 +1,11 @@
+package org.pascal.ecommerce.data.repository
+
+import org.pascal.ecommerce.data.local.entity.ProductEntity
+import org.pascal.ecommerce.data.remote.dtos.ProductResponse
+
+interface ProductRepositoryImpl {
+    suspend fun getProducts(): ProductResponse
+    suspend fun getProductByCategory(body: String) : ProductResponse
+    suspend fun getProductById(id: Int): ProductEntity
+    suspend fun getCategories(): List<String>
+}
