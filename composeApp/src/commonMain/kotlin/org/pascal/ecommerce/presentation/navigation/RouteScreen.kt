@@ -23,8 +23,8 @@ fun RouteScreen(
         bottomBar = {
             if (currentRoute in listOf(
                     Screen.HomeScreen.route,
-                    Screen.GuideScreen.route,
-                    Screen.HistoryScreen.route,
+                    Screen.FavoriteScreen.route,
+                    Screen.CartScreen.route,
                     Screen.ProfileScreen.route
                 )
             ) {

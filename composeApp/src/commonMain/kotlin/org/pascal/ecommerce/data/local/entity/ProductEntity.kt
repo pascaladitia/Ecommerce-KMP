@@ -3,7 +3,7 @@ package org.pascal.ecommerce.data.local.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
-import org.pascal.ecommerce.data.remote.dtos.ReviewResonse
+import org.pascal.ecommerce.data.remote.dtos.product.ReviewResponse
 
 @Entity(tableName = "product")
 @Serializable
@@ -19,7 +19,7 @@ data class ProductEntity(
     val price: Double? = null,
     val rating: Double? = null,
     val returnPolicy: String? = null,
-    val review: List<ReviewResonse>? = null,
+    val review: List<ReviewResponse>? = null,
     val shippingInformation: String? = null,
     val sku: String? = null,
     val stock: Int? = null,

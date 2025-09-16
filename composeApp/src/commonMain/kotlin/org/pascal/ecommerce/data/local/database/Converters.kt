@@ -2,18 +2,18 @@ package org.pascal.ecommerce.data.local.database
 
 import androidx.room.TypeConverter
 import kotlinx.serialization.json.Json
-import org.pascal.ecommerce.data.remote.dtos.ReviewResonse
+import org.pascal.ecommerce.data.remote.dtos.product.ReviewResponse
 
 class Converters {
     private val json = Json { ignoreUnknownKeys = true }
 
     @TypeConverter
-    fun fromReviewList(reviews: List<ReviewResonse>?): String? {
+    fun fromReviewList(reviews: List<ReviewResponse>?): String? {
         return reviews?.let { json.encodeToString(it) }
     }
 
     @TypeConverter
-    fun toReviewList(reviewsString: String?): List<ReviewResonse>? {
+    fun toReviewList(reviewsString: String?): List<ReviewResponse>? {
         return reviewsString?.let { json.decodeFromString(it) } ?: emptyList()
     }
 

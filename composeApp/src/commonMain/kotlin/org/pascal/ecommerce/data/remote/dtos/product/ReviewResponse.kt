@@ -1,9 +1,9 @@
-package org.pascal.ecommerce.data.remote.dtos
+package org.pascal.ecommerce.data.remote.dtos.product
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ReviewResonse(
+data class ReviewResponse(
     val comment: String? = null,
     val date: String? = null,
     val rating: Int? = null,

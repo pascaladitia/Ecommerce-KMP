@@ -12,6 +12,7 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import org.pascal.ecommerce.ContextUtils
+import org.pascal.ecommerce.domain.model.AppInfo
 import java.io.File
 
 actual fun getFileNameFromUri(uri: ByteArray?): String {
@@ -75,4 +76,16 @@ actual fun <T> downloadJson(
             onDownloadState(false, "Unexpected error: ${e.message}")
         }
     }
+}
+
+fun Context.getAppInfo(): AppInfo {
+    val pm = packageManager
+    val appName = applicationInfo.loadLabel(pm).toString()
+    val versionName = pm.getPackageInfo(packageName, 0).versionName ?: "Unknown"
+    return AppInfo(appName, versionName)
+}
+
+actual fun getAppInfo(): AppInfo {
+    val context = ContextUtils.context
+    return context.getAppInfo()
 }

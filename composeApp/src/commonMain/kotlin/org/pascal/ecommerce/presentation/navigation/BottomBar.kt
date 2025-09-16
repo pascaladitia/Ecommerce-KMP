@@ -15,11 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.Bookmark
+import compose.icons.feathericons.Home
+import compose.icons.feathericons.ShoppingCart
+import compose.icons.feathericons.User
 import ecommerce_kmp.composeapp.generated.resources.Res
-import ecommerce_kmp.composeapp.generated.resources.ic_logo
 import ecommerce_kmp.composeapp.generated.resources.no_profile
 import org.jetbrains.compose.resources.painterResource
 
@@ -40,50 +45,56 @@ fun BottomBar(
             val currentRoute = navBackStackEntry?.destination?.route
             val navigationItems = listOf(
                 NavigationItem(
-                    title = "Beranda",
-                    icon = Res.drawable.ic_logo,
+                    title = "Home",
+                    icon = FeatherIcons.Home,
                     screen = Screen.HomeScreen
                 ),
                 NavigationItem(
-                    title = "Panduan",
-                    icon = Res.drawable.ic_logo,
-                    screen = Screen.GuideScreen
+                    title = "Favorite",
+                    icon = FeatherIcons.Bookmark,
+                    screen = Screen.FavoriteScreen
                 ),
                 NavigationItem(
-                    title = "Riwayat",
-                    icon = Res.drawable.ic_logo,
-                    screen = Screen.HistoryScreen
+                    title = "Cart",
+                    icon = FeatherIcons.ShoppingCart,
+                    screen = Screen.CartScreen
                 ),
                 NavigationItem(
                     title = "Profile",
-                    icon = Res.drawable.ic_logo,
+                    icon = FeatherIcons.User,
                     screen = Screen.ProfileScreen
                 )
             )
             navigationItems.map { item ->
                 NavigationBarItem(
                     icon = {
+                        val iconSize = if (currentRoute == item.screen.route) 28.dp else 24.dp
+
                         if (item.screen == Screen.ProfileScreen) {
                             Image(
                                 painter = painterResource(Res.drawable.no_profile),
                                 contentDescription = item.title,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(iconSize)
                             )
                         } else {
                             Icon(
-                                painter = painterResource(item.icon),
+                                imageVector = item.icon,
                                 contentDescription = item.title,
-                                modifier = Modifier.size(24.dp),
+                                modifier = Modifier.size(iconSize),
                                 tint = if (currentRoute == item.screen.route) MaterialTheme.colorScheme.primary else Color.Gray
                             )
                         }
                     },
                     label = {
-                        Text(
-                            text = item.title,
-                            style = MaterialTheme.typography.labelLarge,
-                            color = if (currentRoute == item.screen.route) MaterialTheme.colorScheme.primary else Color.Gray
-                        )
+                        if (currentRoute == item.screen.route) {
+                            Text(
+                                text = item.title,
+                                style = MaterialTheme.typography.titleSmall.copy(
+                                    fontSize = 10.sp
+                                ),
+                                color = Color.White
+                            )
+                        }
                     },
                     alwaysShowLabel = true,
                     selected = currentRoute == item.screen.route,

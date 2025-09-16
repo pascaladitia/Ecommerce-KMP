@@ -35,7 +35,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -55,6 +54,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionsController
 import dev.icerock.moko.permissions.camera.CAMERA
@@ -75,7 +75,6 @@ import org.koin.compose.koinInject
 import org.pascal.ecommerce.PlatformColors
 import org.pascal.ecommerce.presentation.component.button.ButtonComponent
 import org.pascal.ecommerce.presentation.component.dialog.DIALOG_DISSMISS
-import org.pascal.ecommerce.presentation.component.dialog.DIALOG_ERROR
 import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
 import org.pascal.ecommerce.presentation.component.form.FormEmailComponent
 import org.pascal.ecommerce.presentation.component.form.FormPasswordComponent
@@ -83,6 +82,7 @@ import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
 import org.pascal.ecommerce.presentation.screen.login.state.LocalLoginEvent
 import org.pascal.ecommerce.theme.AppTheme
 import org.pascal.ecommerce.utils.base.checkChannelValue
+import org.pascal.ecommerce.utils.getAppInfo
 
 @Composable
 fun LoginScreen(
@@ -92,10 +92,9 @@ fun LoginScreen(
     val coroutineScope = rememberCoroutineScope()
     val event = LocalLoginEvent.current
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val loginEvent = remember { viewModel.loginEvent }
 
-    var showLoading by remember { mutableStateOf(false) }
-    var isDialogVisible by remember { mutableIntStateOf(0) }
     var errorMessage by remember { mutableStateOf("") }
     var isContentVisible by remember { mutableStateOf(false) }
 
@@ -112,24 +111,21 @@ fun LoginScreen(
         controller.providePermission(Permission.CAMERA)
     }
 
-    when (isDialogVisible) {
-        DIALOG_ERROR -> {
-            ShowDialog(
-                message = errorMessage,
-                textButton = stringResource(Res.string.close),
-                color = MaterialTheme.colorScheme.primary
-            ) {
-                isDialogVisible = DIALOG_DISSMISS
-            }
+    if (uiState.isLoading) LoadingScreen()
+
+    if (uiState.isError.first) {
+        ShowDialog(
+            message = errorMessage,
+            textButton = stringResource(Res.string.close),
+            color = MaterialTheme.colorScheme.primary
+        ) {
+            viewModel.setError(false)
         }
     }
 
     LaunchedEffect(Unit) {
         loginEvent.checkChannelValue(
-            onLoading = { showLoading = true },
             onSuccess = {
-                showLoading = false
-
                 if (it) {
                     coroutineScope.launch {
                         isContentVisible = false
@@ -137,17 +133,8 @@ fun LoginScreen(
                         onLogin()
                     }
                 }
-            },
-            onFailure = { _, msg ->
-                showLoading = false
-                errorMessage = msg
-                isDialogVisible = DIALOG_ERROR
             }
         )
-    }
-
-    if (showLoading) {
-        LoadingScreen()
     }
 
     CompositionLocalProvider(
@@ -388,7 +375,7 @@ fun LoginContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "My Ecommerce",
+                    text = getAppInfo().appName,
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 12.sp
@@ -397,7 +384,7 @@ fun LoginContent(
                 )
 
                 Text(
-                    text = "APK Version 1.0.0",
+                    text = "APK Version ${getAppInfo().versionName}",
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 12.sp

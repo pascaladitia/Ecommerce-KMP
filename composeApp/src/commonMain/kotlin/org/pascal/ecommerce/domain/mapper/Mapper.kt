@@ -1,7 +1,7 @@
 package org.pascal.ecommerce.domain.mapper
 
 import org.pascal.ecommerce.data.local.entity.ProductEntity
-import org.pascal.ecommerce.data.remote.dtos.ProductResponse
+import org.pascal.ecommerce.data.remote.dtos.product.ProductResponse
 import org.pascal.ecommerce.domain.model.BaseProduct
 import org.pascal.ecommerce.domain.model.Product
 

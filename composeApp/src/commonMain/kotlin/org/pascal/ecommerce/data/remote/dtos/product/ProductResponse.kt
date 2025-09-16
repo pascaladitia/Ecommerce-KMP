@@ -1,4 +1,4 @@
-package org.pascal.ecommerce.data.remote.dtos
+package org.pascal.ecommerce.data.remote.dtos.product
 
 import org.pascal.ecommerce.data.local.entity.ProductEntity
 import kotlinx.serialization.Serializable

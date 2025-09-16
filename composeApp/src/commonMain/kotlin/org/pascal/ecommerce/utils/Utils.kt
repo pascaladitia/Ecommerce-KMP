@@ -14,6 +14,7 @@ import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toLocalDateTime
 import okio.FileSystem
+import org.pascal.ecommerce.domain.model.AppInfo
 import org.pascal.ecommerce.utils.Constant.FORMAT_DATE
 import kotlin.time.ExperimentalTime
 
@@ -66,3 +67,4 @@ expect fun <T> downloadJson(
     coroutineScope: CoroutineScope,
     onDownloadState: (Boolean, String) -> Unit
 )
+expect fun getAppInfo(): AppInfo

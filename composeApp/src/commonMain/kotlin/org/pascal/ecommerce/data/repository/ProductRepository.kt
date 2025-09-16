@@ -3,7 +3,7 @@ package org.pascal.ecommerce.data.repository
 import org.koin.core.annotation.Single
 import org.pascal.ecommerce.data.local.entity.ProductEntity
 import org.pascal.ecommerce.data.remote.KtorClientApi
-import org.pascal.ecommerce.data.remote.dtos.ProductResponse
+import org.pascal.ecommerce.data.remote.dtos.product.ProductResponse
 
 @Single
 class ProductRepository : ProductRepositoryImpl {

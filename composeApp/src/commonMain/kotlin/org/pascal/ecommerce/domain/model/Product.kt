@@ -1,6 +1,6 @@
 package org.pascal.ecommerce.domain.model
 
-import org.pascal.ecommerce.data.remote.dtos.ReviewResonse
+import org.pascal.ecommerce.data.remote.dtos.product.ReviewResponse
 
 data class Product(
     val id: Int,
@@ -14,7 +14,7 @@ data class Product(
     val price: Double,
     val rating: Double,
     val returnPolicy: String,
-    val review: List<ReviewResonse>,
+    val review: List<ReviewResponse>,
     val shippingInformation: String,
     val sku: String,
     val stock: Int,

@@ -9,6 +9,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import org.pascal.ecommerce.domain.model.AppInfo
+import platform.Foundation.NSBundle
 import platform.Foundation.NSData
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
@@ -103,3 +105,9 @@ actual fun <T> downloadJson(
     }
 }
 
+actual fun getAppInfo(): AppInfo {
+    val bundle = NSBundle.mainBundle
+    val appName = bundle.objectForInfoDictionaryKey("CFBundleName") as? String ?: "Unknown"
+    val version = bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as? String ?: "Unknown"
+    return AppInfo(appName, version)
+}

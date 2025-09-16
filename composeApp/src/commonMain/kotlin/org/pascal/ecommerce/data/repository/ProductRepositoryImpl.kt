@@ -1,7 +1,7 @@
 package org.pascal.ecommerce.data.repository
 
 import org.pascal.ecommerce.data.local.entity.ProductEntity
-import org.pascal.ecommerce.data.remote.dtos.ProductResponse
+import org.pascal.ecommerce.data.remote.dtos.product.ProductResponse
 
 interface ProductRepositoryImpl {
     suspend fun getProducts(): ProductResponse

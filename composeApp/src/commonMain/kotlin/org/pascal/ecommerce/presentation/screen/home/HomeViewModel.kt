@@ -1,59 +1,43 @@
-package org.pascal.ecommerce.presentation.screen.login
+package org.pascal.ecommerce.presentation.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.pascal.ecommerce.data.preferences.PrefLogin
 import org.pascal.ecommerce.domain.model.BaseProduct
+import org.pascal.ecommerce.domain.usecase.local.LocalUseCase
 import org.pascal.ecommerce.domain.usecase.product.ProductUseCase
-import org.pascal.ecommerce.presentation.screen.login.state.LoginUiState
-import org.pascal.ecommerce.utils.base.EventAction
+import org.pascal.ecommerce.presentation.screen.home.state.HomeUIState
 import org.pascal.ecommerce.utils.base.UiState
 import org.pascal.ecommerce.utils.base.UiState.Companion.default
-import org.pascal.ecommerce.utils.base.sendFailure
-import org.pascal.ecommerce.utils.base.sendLoading
-import org.pascal.ecommerce.utils.base.sendSuccess
 
-class LoginViewModel(
+class HomeViewModel(
     private val productUseCase: ProductUseCase,
+    private val localUseCase: LocalUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(LoginUiState())
+    private val _uiState = MutableStateFlow(HomeUIState())
     val uiState get() = _uiState.asStateFlow()
-
-    private val _loginEvent = Channel<EventAction<Boolean>>()
-    val loginEvent = _loginEvent
 
     private val _postApiState = MutableStateFlow<UiState<BaseProduct>>(default())
     val postApiState: StateFlow<UiState<BaseProduct>> = _postApiState
 
-    suspend fun exeLogin(username: String, password: String) {
+    private val _isOnline = MutableStateFlow(true)
+    val isOnline get() = _isOnline.asStateFlow()
+
+    fun loadProduct() {
         setLoading(true)
 
-        if (username == "test" && password == "123456") {
-            setLoading(false)
-            PrefLogin.setIsLogin(true)
-
-            _loginEvent.sendSuccess(true)
-        } else {
-            _uiState.update {
-                it.copy(
-                    isLoading = false,
-                    isError = Pair(true, "Username atau password salah")
-                )
-            }
-        }
-    }
-
-    fun postApi() {
         viewModelScope.launch {
-            _postApiState.value = UiState.loading()
+            val favDb = loadFavorite()
 
             productUseCase.getProductByCategory("")
                 .catch {
@@ -62,6 +46,14 @@ class LoginViewModel(
                     _postApiState.value = UiState.success(it)
                 }
         }
+    }
+
+    private suspend fun loadFavorite(): List<Int>? {
+        val pref = PrefLogin.getLoginResponse()
+        return localUseCase.getAllFavorite()
+            .firstOrNull()
+            ?.filter { it.userId.toString() == pref?.id }
+            ?.map { it.id.toInt() }
     }
 
     fun setLoading(isLoading: Boolean) {
