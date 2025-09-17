@@ -30,7 +30,11 @@ object PrefLogin {
     }
 
     fun getLoginResponse(): User? {
-        return createSettings().getLoginResponse()
+        return try {
+            createSettings().getLoginResponse()
+        } catch (e: Exception) {
+            null
+        }
     }
 
     fun setIsLogin(value: Boolean) {

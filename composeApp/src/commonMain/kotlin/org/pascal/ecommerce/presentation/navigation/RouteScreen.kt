@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import org.pascal.ecommerce.presentation.screen.login.LoginScreen
 import org.pascal.ecommerce.presentation.screen.splash.SplashScreen
 import org.pascal.ecommerce.data.preferences.PrefLogin
+import org.pascal.ecommerce.presentation.screen.home.HomeScreen
 
 @Composable
 fun RouteScreen(
@@ -61,6 +62,14 @@ fun RouteScreen(
                             }
                             launchSingleTop = true
                         }
+                    }
+                )
+            }
+            composable(route = Screen.HomeScreen.route) {
+                HomeScreen(
+                    paddingValues = paddingValues,
+                    onDetail = {
+                        navController.navigate(Screen.DetailScreen.createRoute(it ?: ""))
                     }
                 )
             }
