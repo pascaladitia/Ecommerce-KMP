@@ -27,13 +27,10 @@ actual fun createSettings(): Settings {
 }
 
 actual fun getDatabaseBuilder(): AppDatabase {
-    val dbFile = "${NSHomeDirectory()}/app.db"
     return Room.databaseBuilder<AppDatabase>(
-        name = dbFile,
-        factory = { AppDatabase::class.instantiateImpl() }
-    ).setDriver(_root_ide_package_.androidx.sqlite.driver.bundled.BundledSQLiteDriver())
-        .setQueryCoroutineContext(Dispatchers.IO)
-        .build()
+        name = "${NSHomeDirectory()}/app.db",
+        factory = { AppDatabase::class as AppDatabase }
+    ).setDriver(_root_ide_package_.androidx.sqlite.driver.bundled.BundledSQLiteDriver()).build()
 }
 
 @Composable

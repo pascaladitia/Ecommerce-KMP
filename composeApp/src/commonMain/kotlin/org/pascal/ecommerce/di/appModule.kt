@@ -21,10 +21,10 @@ val appModule = module {
     single { FavoriteLocalRepository(get()) }
     single { ProductLocalRepository(get()) }
 
-    single{ ProductRepository() }
+    single { ProductRepository() }
 
-    single{ LocalUseCase(get(), get(),get(), get()) }
-    single{ ProductUseCase(get()) }
+    single { LocalUseCase(get(), get(),get(), get()) }
+    single { ProductUseCase(get()) }
 
     singleOf(::LoginViewModel)
     singleOf(::HomeViewModel)
