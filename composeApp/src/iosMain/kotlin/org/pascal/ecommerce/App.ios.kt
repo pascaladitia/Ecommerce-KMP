@@ -5,16 +5,17 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.room.Room
-import org.pascal.ecommerce.data.local.database.AppDatabase
+import androidx.room.RoomDatabase
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.Settings
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
+import org.pascal.ecommerce.data.local.database.AppDatabase
 import platform.CoreGraphics.CGRectMake
-import platform.Foundation.NSHomeDirectory
+import platform.Foundation.NSDocumentDirectory
+import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDefaults
+import platform.Foundation.NSUserDomainMask
 import platform.UIKit.UIApplication
 import platform.UIKit.UIColor
 import platform.UIKit.UINavigationBar
@@ -26,11 +27,23 @@ actual fun createSettings(): Settings {
     return NSUserDefaultsSettings(NSUserDefaults.standardUserDefaults)
 }
 
-actual fun getDatabaseBuilder(): AppDatabase {
+actual fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
+    val dbFilePath = documentDirectory() + "/app.db"
     return Room.databaseBuilder<AppDatabase>(
-        name = "${NSHomeDirectory()}/app.db",
-        factory = { AppDatabase::class as AppDatabase }
-    ).setDriver(_root_ide_package_.androidx.sqlite.driver.bundled.BundledSQLiteDriver()).build()
+        name = dbFilePath
+    )
+}
+
+@OptIn(ExperimentalForeignApi::class)
+private fun documentDirectory(): String {
+    val documentDirectory = NSFileManager.defaultManager.URLForDirectory(
+        directory = NSDocumentDirectory,
+        inDomain = NSUserDomainMask,
+        appropriateForURL = null,
+        create = false,
+        error = null,
+    )
+    return requireNotNull(documentDirectory?.path)
 }
 
 @Composable

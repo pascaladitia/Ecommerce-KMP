@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.preference.PreferenceManager
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
@@ -41,13 +42,13 @@ actual fun createSettings(): Settings {
     return SharedPreferencesSettings(preferences)
 }
 
-actual fun getDatabaseBuilder(): AppDatabase {
-    val context: Context = ContextUtils.context
-    val dbFile = context.getDatabasePath("app.db")
-    return Room.databaseBuilder<AppDatabase>(context, dbFile.absolutePath)
-        .setDriver(BundledSQLiteDriver())
-        .setQueryCoroutineContext(Dispatchers.IO)
-        .build()
+actual fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
+    val appContext = ContextUtils.context
+    val dbFile = appContext.getDatabasePath("app.db")
+    return Room.databaseBuilder<AppDatabase>(
+        context = appContext,
+        name = dbFile.absolutePath
+    )
 }
 
 @SuppressLint("ContextCastToActivity")
