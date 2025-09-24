@@ -3,16 +3,22 @@ package org.pascal.ecommerce.presentation.navigation
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.serialization.json.Json
 import org.pascal.ecommerce.presentation.screen.login.LoginScreen
 import org.pascal.ecommerce.presentation.screen.splash.SplashScreen
 import org.pascal.ecommerce.data.preferences.PrefLogin
+import org.pascal.ecommerce.presentation.screen.cart.CartScreen
 import org.pascal.ecommerce.presentation.screen.detail.DetailScreen
+import org.pascal.ecommerce.presentation.screen.favorite.FavoriteScreen
 import org.pascal.ecommerce.presentation.screen.home.HomeScreen
+import org.pascal.ecommerce.utils.base.getFromPreviousBackStack
+import org.pascal.ecommerce.utils.base.saveToCurrentBackStack
 
 @Composable
 fun RouteScreen(
@@ -70,7 +76,25 @@ fun RouteScreen(
                 HomeScreen(
                     paddingValues = paddingValues,
                     onDetail = {
-                        navController.currentBackStackEntry?.savedStateHandle?.set("id", it)
+                        saveToCurrentBackStack(navController, "id", it)
+                        navController.navigate(Screen.DetailScreen.route)
+                    }
+                )
+            }
+            composable(route = Screen.CartScreen.route) {
+                CartScreen(
+                    paddingValues = paddingValues,
+                    onFinish = {
+                        saveToCurrentBackStack(navController, "cart", it)
+                        navController.navigate(Screen.ReportScreen.route)
+                    }
+                )
+            }
+            composable(route = Screen.FavoriteScreen.route) {
+                FavoriteScreen (
+                    paddingValues = paddingValues,
+                    onDetail = {
+                        saveToCurrentBackStack(navController, "id", it?.id.toString())
                         navController.navigate(Screen.DetailScreen.route)
                     }
                 )
@@ -78,7 +102,7 @@ fun RouteScreen(
             composable(route = Screen.DetailScreen.route) {
                 DetailScreen(
                     paddingValues = paddingValues,
-                    productId = navController.previousBackStackEntry?.savedStateHandle?.get<String>("id"),
+                    productId = getFromPreviousBackStack(navController, "id"),
                     onNavBack = {
                         navController.navigateUp()
                     }

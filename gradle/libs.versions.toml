@@ -28,6 +28,7 @@ moko-permission = "0.20.1"
 preferenceKtx = "1.2.1"
 peekaboo = "0.5.2"
 sqlite = "2.6.0"
+composeWebviewMultiplatform = "2.0.3"
 
 [libraries]
 
@@ -75,6 +76,7 @@ peekaboo-image-picker = { module = "io.github.onseok:peekaboo-image-picker", ver
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 moko-permission = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko-permission" }
 moko-permission-camera = { module = "dev.icerock.moko:permissions-camera", version.ref = "moko-permission" }
+compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
 
 [plugins]
 

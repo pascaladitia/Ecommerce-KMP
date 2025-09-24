@@ -1,25 +1,25 @@
-package org.pascal.ecommerce.data.repository
+package org.pascal.ecommerce.data.repository.product
 
 import org.koin.core.annotation.Single
 import org.pascal.ecommerce.data.local.entity.ProductEntity
-import org.pascal.ecommerce.data.remote.KtorClientApi
+import org.pascal.ecommerce.data.remote.api.ProductApi
 import org.pascal.ecommerce.data.remote.dtos.product.ProductResponse
 
 @Single
 class ProductRepository : ProductRepositoryImpl {
     override suspend fun getProducts(): ProductResponse {
-        return KtorClientApi.getProduct()
+        return ProductApi.getProduct()
     }
 
     override suspend fun getProductByCategory(body: String): ProductResponse {
-        return KtorClientApi.getProductByCategory(body)
+        return ProductApi.getProductByCategory(body)
     }
 
     override suspend fun getProductById(id: Int): ProductEntity {
-        return KtorClientApi.getProductById(id)
+        return ProductApi.getProductById(id)
     }
 
     override suspend fun getCategories(): List<String> {
-        return KtorClientApi.getCategories()
+        return ProductApi.getCategories()
     }
 }

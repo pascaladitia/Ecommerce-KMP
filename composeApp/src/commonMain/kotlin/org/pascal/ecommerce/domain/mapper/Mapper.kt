@@ -2,8 +2,10 @@ package org.pascal.ecommerce.domain.mapper
 
 import org.pascal.ecommerce.data.local.entity.ProductEntity
 import org.pascal.ecommerce.data.remote.dtos.product.ProductResponse
+import org.pascal.ecommerce.data.remote.dtos.transaction.TransactionResponse
 import org.pascal.ecommerce.domain.model.BaseProduct
 import org.pascal.ecommerce.domain.model.Product
+import org.pascal.ecommerce.domain.model.Transaction
 
 fun ProductResponse.toDomain(): BaseProduct {
     return BaseProduct(
@@ -63,5 +65,11 @@ fun Product.toEntity(): ProductEntity {
         warrantyInformation = this.warrantyInformation,
         weight = this.weight,
         isFavorite = this.isFavorite
+    )
+}
+
+fun TransactionResponse.toDomain(): Transaction {
+    return Transaction(
+        redirectUrl = this.redirectUrl.orEmpty()
     )
 }

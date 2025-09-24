@@ -67,6 +67,7 @@ kotlin {
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
             implementation(libs.sqlite.bundled)
+            implementation(libs.compose.webview.multiplatform)
         }
 
         commonTest.dependencies {

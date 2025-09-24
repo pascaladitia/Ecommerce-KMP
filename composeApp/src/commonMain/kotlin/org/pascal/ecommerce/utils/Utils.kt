@@ -14,6 +14,7 @@ import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toLocalDateTime
 import okio.FileSystem
+import org.pascal.ecommerce.data.local.entity.CartEntity
 import org.pascal.ecommerce.domain.model.AppInfo
 import org.pascal.ecommerce.utils.Constant.FORMAT_DATE
 import kotlin.time.ExperimentalTime
@@ -37,6 +38,24 @@ fun reFormatDate(date: String?): LocalDate? {
         e.printStackTrace()
         null
     }
+}
+
+
+fun calculateTotalPrice(products: List<CartEntity?>): String {
+    val total = products.asSequence()
+        .filterNotNull()
+        .sumOf { (it.price ?: 0.0) * (it.qty ?: 0) }
+
+    return formatTwoDecimals(total)
+}
+
+private fun formatTwoDecimals(value: Double): String {
+    val scaled = kotlin.math.round(value * 100.0)
+    val sign = if (scaled < 0) "-" else ""
+    val absScaled = kotlin.math.abs(scaled)
+    val whole = (absScaled / 100).toLong()
+    val frac = (absScaled % 100).toInt()
+    return "$sign$whole.${frac.toString().padStart(2, '0')}"
 }
 
 @OptIn(ExperimentalTime::class)

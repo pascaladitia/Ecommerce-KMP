@@ -1,4 +1,4 @@
-package org.pascal.ecommerce.data.repository
+package org.pascal.ecommerce.data.repository.product
 
 import org.pascal.ecommerce.data.local.entity.ProductEntity
 import org.pascal.ecommerce.data.remote.dtos.product.ProductResponse

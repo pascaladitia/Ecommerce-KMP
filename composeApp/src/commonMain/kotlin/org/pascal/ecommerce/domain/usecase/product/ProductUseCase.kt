@@ -3,7 +3,7 @@ package org.pascal.ecommerce.domain.usecase.product
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.core.annotation.Single
-import org.pascal.ecommerce.data.repository.ProductRepository
+import org.pascal.ecommerce.data.repository.product.ProductRepository
 import org.pascal.ecommerce.domain.mapper.toDomain
 import org.pascal.ecommerce.domain.model.BaseProduct
 import org.pascal.ecommerce.domain.model.Product
