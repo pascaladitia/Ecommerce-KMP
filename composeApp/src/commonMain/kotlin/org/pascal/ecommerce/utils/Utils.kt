@@ -58,8 +58,11 @@ fun newDiskCache(): DiskCache {
 }
 
 expect fun getFileNameFromUri(uri: ByteArray?): String
+
 expect fun viewPhoto(uri: ByteArray?)
+
 expect fun getFileSizeInMB(uri: ByteArray?): String
+
 expect fun <T> downloadJson(
     entity: T?,
     convertToMap: T.() -> Map<String, String?>,
@@ -67,4 +70,9 @@ expect fun <T> downloadJson(
     coroutineScope: CoroutineScope,
     onDownloadState: (Boolean, String) -> Unit
 )
+
 expect fun getAppInfo(): AppInfo
+
+expect fun isOnline(): Boolean
+
+expect fun showToast(message: String)

@@ -15,9 +15,11 @@ import org.pascal.ecommerce.data.local.entity.FavoriteEntity
 import org.pascal.ecommerce.data.local.entity.ProductEntity
 import org.pascal.ecommerce.data.preferences.PrefCategories
 import org.pascal.ecommerce.data.preferences.PrefLogin
+import org.pascal.ecommerce.domain.model.Product
 import org.pascal.ecommerce.domain.usecase.local.LocalUseCase
 import org.pascal.ecommerce.domain.usecase.product.ProductUseCase
 import org.pascal.ecommerce.presentation.screen.home.state.HomeUIState
+import org.pascal.ecommerce.utils.isOnline
 
 class HomeViewModel(
     private val productUseCase: ProductUseCase,
@@ -27,9 +29,6 @@ class HomeViewModel(
     private val _uiState = MutableStateFlow(HomeUIState())
     val uiState get() = _uiState.asStateFlow()
 
-    private val _isOnline = MutableStateFlow(true)
-    val isOnline get() = _isOnline.asStateFlow()
-
     fun loadProduct(name: String = "") {
         setLoading(true)
 
@@ -37,7 +36,7 @@ class HomeViewModel(
             try {
                 val favDb = loadFavorite().orEmpty()
 
-                val result = if (isOnline.value) {
+                val result = if (isOnline()) {
                     if (name.isEmpty()) {
                         productUseCase.getProduct().firstOrNull()?.products.orEmpty()
                     } else {
@@ -51,7 +50,7 @@ class HomeViewModel(
                     result.map { it.copy(isFavorite = favDb.any { favId -> favId == it.id }) }
                 }
 
-                if (isOnline.value) saveLocalProduct(product)
+                if (isOnline()) saveLocalProduct(product)
 
                 _uiState.update {
                     it.copy(
@@ -74,10 +73,10 @@ class HomeViewModel(
         _uiState.update { it.copy(isLoading = true) }
 
         try {
-            val result = if (isOnline.value) productUseCase.getCategories().firstOrNull()
+            val result = if (isOnline()) productUseCase.getCategories().firstOrNull()
             else PrefCategories.getCategoriesResponse()
 
-            if (isOnline.value) PrefCategories.setCategoriesResponse(result)
+            if (isOnline()) PrefCategories.setCategoriesResponse(result)
 
             _uiState.update {
                 it.copy(
@@ -115,14 +114,14 @@ class HomeViewModel(
             ?.map { it.id.toInt() }
     }
 
-    private suspend fun saveLocalProduct(product: List<ProductEntity>) {
+    private suspend fun saveLocalProduct(product: List<Product>) {
         localUseCase.deleteProduct().collect()
         product.forEach {
             localUseCase.insertProduct(it).collect()
         }
     }
 
-    suspend fun saveFavorite(isFav: Boolean, product: ProductEntity?) {
+    suspend fun saveFavorite(isFav: Boolean, product: Product?) {
         try {
             val pref = PrefLogin.getLoginResponse()
 

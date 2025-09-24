@@ -3,7 +3,11 @@ package org.pascal.ecommerce.utils
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.ptr
 import kotlinx.cinterop.usePinned
+import kotlinx.cinterop.value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.builtins.MapSerializer
@@ -22,6 +26,15 @@ import platform.Foundation.NSUserDomainMask
 import platform.Foundation.create
 import platform.Foundation.stringWithFormat
 import platform.Foundation.writeToFile
+import platform.SystemConfiguration.SCNetworkReachabilityCreateWithName
+import platform.SystemConfiguration.SCNetworkReachabilityFlagsVar
+import platform.SystemConfiguration.SCNetworkReachabilityGetFlags
+import platform.SystemConfiguration.kSCNetworkFlagsConnectionRequired
+import platform.SystemConfiguration.kSCNetworkFlagsReachable
+import platform.UIKit.UIAlertAction
+import platform.UIKit.UIAlertActionStyleDefault
+import platform.UIKit.UIAlertController
+import platform.UIKit.UIAlertControllerStyleAlert
 import platform.UIKit.UIApplication
 
 @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
@@ -110,4 +123,33 @@ actual fun getAppInfo(): AppInfo {
     val appName = bundle.objectForInfoDictionaryKey("CFBundleName") as? String ?: "Unknown"
     val version = bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as? String ?: "Unknown"
     return AppInfo(appName, version)
+}
+
+actual fun showToast(message: String) {
+    val alert = UIAlertController.alertControllerWithTitle(
+        "Info",
+        message,
+        UIAlertControllerStyleAlert
+    )
+
+    alert.addAction(
+        UIAlertAction.actionWithTitle(
+            "OK",
+            UIAlertActionStyleDefault
+        ) { _ ->  }
+    )
+
+    val rootController = UIApplication.sharedApplication.keyWindow?.rootViewController
+    rootController?.presentViewController(alert, animated = true, completion = null)
+}
+
+@OptIn(ExperimentalForeignApi::class)
+actual fun isOnline(): Boolean = memScoped {
+    val ref = SCNetworkReachabilityCreateWithName(null, "apple.com") ?: return false
+    val flagsVar = alloc<SCNetworkReachabilityFlagsVar>()
+    if (!SCNetworkReachabilityGetFlags(ref, flagsVar.ptr)) return false
+    val f: UInt = flagsVar.value
+    val reachable     = (f and kSCNetworkFlagsReachable) != 0u
+    val connectionReq = (f and kSCNetworkFlagsConnectionRequired) != 0u
+    reachable && !connectionReq
 }

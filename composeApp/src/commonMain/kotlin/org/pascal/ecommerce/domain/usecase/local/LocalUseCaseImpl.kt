@@ -5,6 +5,7 @@ import org.pascal.ecommerce.data.local.entity.CartEntity
 import org.pascal.ecommerce.data.local.entity.FavoriteEntity
 import org.pascal.ecommerce.data.local.entity.ProductEntity
 import org.pascal.ecommerce.data.local.entity.ProfileEntity
+import org.pascal.ecommerce.domain.model.Product
 
 interface LocalUseCaseImpl {
     // Profile
@@ -28,9 +29,9 @@ interface LocalUseCaseImpl {
     fun insertFavorite(item: FavoriteEntity): Flow<Unit>
 
     // Product
-    fun getProductById(id: Int): Flow<ProductEntity?>
-    fun getAllProduct(): Flow<List<ProductEntity>>
-    fun deleteProductById(item: ProductEntity): Flow<Unit>
+    fun getProductById(id: Int): Flow<Product?>
+    fun getAllProduct(): Flow<List<Product>>
+    fun deleteProductById(item: Product): Flow<Unit>
     fun deleteProduct(): Flow<Unit>
-    fun insertProduct(item: ProductEntity): Flow<Unit>
+    fun insertProduct(item: Product): Flow<Unit>
 }

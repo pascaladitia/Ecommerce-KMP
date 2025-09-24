@@ -8,7 +8,7 @@ import org.pascal.ecommerce.domain.model.Product
 fun ProductResponse.toDomain(): BaseProduct {
     return BaseProduct(
         limit = this.limit ?: 0,
-        products = this.products.orEmpty(),
+        products = this.products?.map { it.toDomain() } as List<Product>,
         skip = this.skip ?: 0,
         total = this.total ?: 0
     )
@@ -37,5 +37,31 @@ fun ProductEntity.toDomain(): Product {
         warrantyInformation = this.warrantyInformation.orEmpty(),
         weight = this.weight ?: 0,
         isFavorite = this.isFavorite ?: false
+    )
+}
+
+fun Product.toEntity(): ProductEntity {
+    return ProductEntity(
+        id = this.id,
+        availabilityStatus = this.availabilityStatus,
+        brand = this.brand,
+        category = this.category,
+        description = this.description,
+        discountPercentage = this.discountPercentage,
+        images = this.images,
+        minimumOrderQuantity = this.minimumOrderQuantity,
+        price = this.price,
+        rating = this.rating,
+        returnPolicy = this.returnPolicy,
+        review = this.review,
+        shippingInformation = this.shippingInformation,
+        sku = this.sku,
+        stock = this.stock,
+        tags = this.tags,
+        thumbnail = this.thumbnail,
+        title = this.title,
+        warrantyInformation = this.warrantyInformation,
+        weight = this.weight,
+        isFavorite = this.isFavorite
     )
 }

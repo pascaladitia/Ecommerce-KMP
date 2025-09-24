@@ -61,13 +61,14 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.Bookmark
 import ecommerce_kmp.composeapp.generated.resources.Res
 import ecommerce_kmp.composeapp.generated.resources.close
+import ecommerce_kmp.composeapp.generated.resources.connection_offline
 import ecommerce_kmp.composeapp.generated.resources.filter_list
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
-import org.pascal.ecommerce.data.local.entity.ProductEntity
 import org.pascal.ecommerce.data.preferences.PrefLogin
 import org.pascal.ecommerce.data.remote.dtos.user.User
 import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
@@ -79,6 +80,8 @@ import org.pascal.ecommerce.presentation.screen.home.state.HomeUIState
 import org.pascal.ecommerce.presentation.screen.home.state.LocalHomeEvent
 import org.pascal.ecommerce.theme.AppTheme
 import org.pascal.ecommerce.utils.getAsyncImageLoader
+import org.pascal.ecommerce.utils.isOnline
+import org.pascal.ecommerce.utils.showToast
 
 @Composable
 fun HomeScreen(
@@ -125,10 +128,10 @@ fun HomeScreen(
                     },
                     onCategory = {
                         coroutine.launch {
-                            if (viewModel.isOnline.value) {
+                            if (isOnline()) {
                                 viewModel.loadProduct(it)
                             } else {
-//                                showToast(context, context.getString(R.string.connection_offline))
+                                showToast(getString(Res.string.connection_offline))
                             }
                         }
                     },
@@ -426,7 +429,7 @@ private fun HomePreview() {
         HomeContent(
             uiState = HomeUIState(
                 category = listOf("Category 1", "Category 2"),
-                product = listOf(ProductEntity(), ProductEntity(), ProductEntity()),
+                product = emptyList(),
             )
         )
     }

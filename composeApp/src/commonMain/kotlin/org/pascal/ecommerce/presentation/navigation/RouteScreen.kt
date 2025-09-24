@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import org.pascal.ecommerce.presentation.screen.login.LoginScreen
 import org.pascal.ecommerce.presentation.screen.splash.SplashScreen
 import org.pascal.ecommerce.data.preferences.PrefLogin
+import org.pascal.ecommerce.presentation.screen.detail.DetailScreen
 import org.pascal.ecommerce.presentation.screen.home.HomeScreen
 
 @Composable
@@ -69,7 +70,17 @@ fun RouteScreen(
                 HomeScreen(
                     paddingValues = paddingValues,
                     onDetail = {
-                        navController.navigate(Screen.DetailScreen.createRoute(it ?: ""))
+                        navController.currentBackStackEntry?.savedStateHandle?.set("id", it)
+                        navController.navigate(Screen.DetailScreen.route)
+                    }
+                )
+            }
+            composable(route = Screen.DetailScreen.route) {
+                DetailScreen(
+                    paddingValues = paddingValues,
+                    productId = navController.previousBackStackEntry?.savedStateHandle?.get<String>("id"),
+                    onNavBack = {
+                        navController.navigateUp()
                     }
                 )
             }

@@ -11,6 +11,9 @@ import org.pascal.ecommerce.data.local.repository.cart.CartLocalRepository
 import org.pascal.ecommerce.data.local.repository.favorite.FavoriteLocalRepository
 import org.pascal.ecommerce.data.local.repository.product.ProductLocalRepository
 import org.pascal.ecommerce.data.local.repository.profile.ProfileLocalRepository
+import org.pascal.ecommerce.domain.mapper.toDomain
+import org.pascal.ecommerce.domain.mapper.toEntity
+import org.pascal.ecommerce.domain.model.Product
 
 @Single
 class LocalUseCase(
@@ -79,23 +82,23 @@ class LocalUseCase(
     }
 
     // -------- Product --------
-    override fun getProductById(id: Int): Flow<ProductEntity?> = flow {
-        emit(productRepo.getProductById(id))
+    override fun getProductById(id: Int): Flow<Product?> = flow {
+        emit(productRepo.getProductById(id)?.toDomain())
     }
 
-    override fun getAllProduct(): Flow<List<ProductEntity>> = flow {
-        emit(productRepo.getAllProduct())
+    override fun getAllProduct(): Flow<List<Product>> = flow {
+        emit(productRepo.getAllProduct().map { it.toDomain() })
     }
 
-    override fun deleteProductById(item: ProductEntity): Flow<Unit> = flow {
-        emit(productRepo.deleteProductById(item))
+    override fun deleteProductById(item: Product): Flow<Unit> = flow {
+        emit(productRepo.deleteProductById(item.toEntity()))
     }
 
     override fun deleteProduct(): Flow<Unit> = flow {
         emit(productRepo.deleteProduct())
     }
 
-    override fun insertProduct(item: ProductEntity): Flow<Unit> = flow {
-        emit(productRepo.insertProduct(item))
+    override fun insertProduct(item: Product): Flow<Unit> = flow {
+        emit(productRepo.insertProduct(item.toEntity()))
     }
 }

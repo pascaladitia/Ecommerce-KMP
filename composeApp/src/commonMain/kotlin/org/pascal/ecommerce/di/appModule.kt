@@ -13,6 +13,7 @@ import org.pascal.ecommerce.data.repository.ProductRepository
 import org.pascal.ecommerce.domain.usecase.local.LocalUseCase
 import org.pascal.ecommerce.domain.usecase.product.ProductUseCase
 import org.pascal.ecommerce.getDatabaseBuilder
+import org.pascal.ecommerce.presentation.screen.detail.DetailViewModel
 import org.pascal.ecommerce.presentation.screen.home.HomeViewModel
 import org.pascal.ecommerce.presentation.screen.login.LoginViewModel
 
@@ -32,4 +33,5 @@ val appModule = module {
 
     singleOf(::LoginViewModel)
     singleOf(::HomeViewModel)
+    singleOf(::DetailViewModel)
 }
