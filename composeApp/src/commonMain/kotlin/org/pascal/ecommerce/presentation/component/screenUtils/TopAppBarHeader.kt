@@ -23,13 +23,13 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Menu
-import org.pascal.ecommerce.data.remote.dtos.user.User
+import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
 import org.pascal.ecommerce.utils.getAsyncImageLoader
 
 @Composable
 fun TopAppBarHeader(
     modifier: Modifier = Modifier,
-    user: User? = null
+    user: UserInfo? = null
 ) {
     Row(
         modifier = modifier
@@ -61,7 +61,7 @@ fun TopAppBarHeader(
         ) {
             AsyncImage(
                 imageLoader = getAsyncImageLoader(LocalPlatformContext.current),
-                model = user?.photo_url,
+                model = user?.photoUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

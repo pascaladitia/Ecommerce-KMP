@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.update
 import org.koin.android.annotation.KoinViewModel
 import org.pascal.ecommerce.data.local.entity.FavoriteEntity
 import org.pascal.ecommerce.data.preferences.PrefLogin
-import org.pascal.ecommerce.domain.usecase.local.LocalUseCase
-import org.pascal.ecommerce.domain.usecase.product.ProductUseCase
+import org.pascal.ecommerce.domain.usecase.local.LocalUseCaseImpl
+import org.pascal.ecommerce.domain.usecase.product.ProductUseCaseImpl
 import org.pascal.ecommerce.presentation.screen.favorite.state.FavoriteUIState
 
 @KoinViewModel
 class FavoriteViewModel(
-    private val productUseCase: ProductUseCase,
-    private val localUseCase: LocalUseCase
+    private val productUseCase: ProductUseCaseImpl,
+    private val localUseCase: LocalUseCaseImpl
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FavoriteUIState())
@@ -30,7 +30,7 @@ class FavoriteViewModel(
 
         try {
             val result = localUseCase.getAllFavorite().firstOrNull()?.filter {
-                it.userId.toString() == pref?.id
+                it.userId.toString() == pref?.uid
             }
             _uiState.update {
                 it.copy(

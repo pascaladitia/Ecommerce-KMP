@@ -12,12 +12,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.pascal.ecommerce.data.local.entity.FavoriteEntity
-import org.pascal.ecommerce.data.local.entity.ProductEntity
 import org.pascal.ecommerce.data.preferences.PrefCategories
 import org.pascal.ecommerce.data.preferences.PrefLogin
 import org.pascal.ecommerce.domain.model.Product
 import org.pascal.ecommerce.domain.usecase.local.LocalUseCase
+import org.pascal.ecommerce.domain.usecase.local.LocalUseCaseImpl
 import org.pascal.ecommerce.domain.usecase.product.ProductUseCase
+import org.pascal.ecommerce.domain.usecase.product.ProductUseCaseImpl
 import org.pascal.ecommerce.presentation.screen.home.state.HomeUIState
 import org.pascal.ecommerce.utils.isOnline
 
@@ -110,7 +111,7 @@ class HomeViewModel(
         val pref = PrefLogin.getLoginResponse()
         return localUseCase.getAllFavorite()
             .firstOrNull()
-            ?.filter { it.userId.toString() == pref?.id }
+            ?.filter { it.userId.toString() == pref?.uid }
             ?.map { it.id.toInt() }
     }
 
@@ -127,7 +128,7 @@ class HomeViewModel(
 
             val entity = FavoriteEntity(
                 id = product?.id?.toLong() ?: 0L,
-                userId = pref?.id,
+                userId = pref?.uid,
                 name = product?.title,
                 price = product?.price,
                 imageID = product?.thumbnail,

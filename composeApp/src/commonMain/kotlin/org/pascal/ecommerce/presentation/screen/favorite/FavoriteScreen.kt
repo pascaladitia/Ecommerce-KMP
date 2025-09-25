@@ -59,7 +59,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.pascal.ecommerce.data.local.entity.FavoriteEntity
 import org.pascal.ecommerce.data.preferences.PrefLogin
-import org.pascal.ecommerce.data.remote.dtos.user.User
+import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
 import org.pascal.ecommerce.presentation.component.screenUtils.TopAppBarHeader
 import org.pascal.ecommerce.presentation.screen.favorite.state.FavoriteUIState
 import org.pascal.ecommerce.presentation.screen.favorite.state.LocalFavoriteEvent
@@ -110,7 +110,7 @@ fun FavoriteScreen(
 
 @Composable
 fun FavoriteContent(
-    user: User? = null,
+    user: UserInfo? = null,
     uiState: FavoriteUIState
 ) {
     Box(

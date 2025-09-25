@@ -5,13 +5,13 @@ import com.russhwolf.settings.get
 import com.russhwolf.settings.set
 import kotlinx.serialization.json.Json
 import org.pascal.ecommerce.createSettings
-import org.pascal.ecommerce.data.remote.dtos.user.User
+import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
 
 object PrefLogin {
     private const val IS_LOGIN = "is_login"
     private const val RESPONSE_LOGIN = "response_login"
 
-    private fun Settings.setLoginResponse(value: User?) {
+    private fun Settings.setLoginResponse(value: UserInfo?) {
         if (value != null) {
             val jsonString = Json.encodeToString(value)
             putString(RESPONSE_LOGIN, jsonString)
@@ -20,16 +20,16 @@ object PrefLogin {
         }
     }
 
-    private fun Settings.getLoginResponse(): User? {
+    private fun Settings.getLoginResponse(): UserInfo? {
         val jsonString = getString(RESPONSE_LOGIN, "")
         return jsonString.let { Json.decodeFromString(it) }
     }
 
-    fun setLoginResponse(value: User?) {
+    fun setLoginResponse(value: UserInfo?) {
         createSettings().setLoginResponse(value)
     }
 
-    fun getLoginResponse(): User? {
+    fun getLoginResponse(): UserInfo? {
         return try {
             createSettings().getLoginResponse()
         } catch (e: Exception) {

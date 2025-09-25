@@ -68,6 +68,8 @@ kotlin {
             implementation(libs.peekaboo.image.picker)
             implementation(libs.sqlite.bundled)
             implementation(libs.compose.webview.multiplatform)
+            implementation(libs.firebase.auth)
+            implementation(libs.firebase.app)
         }
 
         commonTest.dependencies {

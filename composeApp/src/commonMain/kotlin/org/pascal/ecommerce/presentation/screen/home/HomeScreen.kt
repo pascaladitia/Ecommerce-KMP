@@ -70,7 +70,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.pascal.ecommerce.data.preferences.PrefLogin
-import org.pascal.ecommerce.data.remote.dtos.user.User
+import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
 import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
 import org.pascal.ecommerce.presentation.component.form.Search
 import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
@@ -160,7 +160,7 @@ fun HomeScreen(
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
-    user: User? = null,
+    user: UserInfo? = null,
     uiState: HomeUIState
 ) {
     Box(

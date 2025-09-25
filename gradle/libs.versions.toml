@@ -29,6 +29,7 @@ preferenceKtx = "1.2.1"
 peekaboo = "0.5.2"
 sqlite = "2.6.0"
 composeWebviewMultiplatform = "2.0.3"
+firebaseApp = "1.13.0"
 
 [libraries]
 
@@ -77,6 +78,8 @@ sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sql
 moko-permission = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko-permission" }
 moko-permission-camera = { module = "dev.icerock.moko:permissions-camera", version.ref = "moko-permission" }
 compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
+firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "firebaseApp" }
+firebase-app = { module = "dev.gitlive:firebase-app", version.ref = "firebaseApp" }
 
 [plugins]
 

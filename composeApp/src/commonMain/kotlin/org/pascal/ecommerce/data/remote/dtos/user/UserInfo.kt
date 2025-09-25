@@ -1,9 +1,9 @@
 package org.pascal.ecommerce.data.remote.dtos.user
 
 @kotlinx.serialization.Serializable
-data class User(
-    val id: String? = null,
-    val name: String? = null,
+data class UserInfo(
+    val uid: String? = null,
+    val displayName: String? = null,
     val email: String? = null,
-    val photo_url: String? = null
+    val photoUrl: String? = null
 )

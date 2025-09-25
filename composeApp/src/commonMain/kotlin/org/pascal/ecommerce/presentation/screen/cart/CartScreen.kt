@@ -56,7 +56,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.pascal.ecommerce.data.local.entity.CartEntity
-import org.pascal.ecommerce.data.remote.dtos.user.User
+import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
 import org.pascal.ecommerce.presentation.component.screenUtils.TopAppBarHeader
 import org.pascal.ecommerce.presentation.screen.cart.component.CartPayment
 import org.pascal.ecommerce.presentation.screen.cart.state.LocalCartEvent
@@ -124,7 +124,7 @@ fun CartScreen(
 
 @Composable
 fun CartContent(
-    user: User? = null,
+    user: UserInfo? = null,
     product: List<CartEntity> = emptyList()
 ) {
     Box(

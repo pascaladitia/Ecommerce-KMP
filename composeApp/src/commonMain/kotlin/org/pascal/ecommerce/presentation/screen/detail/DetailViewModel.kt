@@ -11,15 +11,15 @@ import org.pascal.ecommerce.data.local.entity.CartEntity
 import org.pascal.ecommerce.data.local.entity.FavoriteEntity
 import org.pascal.ecommerce.data.preferences.PrefLogin
 import org.pascal.ecommerce.domain.model.Product
-import org.pascal.ecommerce.domain.usecase.local.LocalUseCase
-import org.pascal.ecommerce.domain.usecase.product.ProductUseCase
+import org.pascal.ecommerce.domain.usecase.local.LocalUseCaseImpl
+import org.pascal.ecommerce.domain.usecase.product.ProductUseCaseImpl
 import org.pascal.ecommerce.presentation.screen.detail.state.DetailUIState
 import org.pascal.ecommerce.utils.isOnline
 import org.pascal.ecommerce.utils.showToast
 
 class DetailViewModel(
-    private val productUseCase: ProductUseCase,
-    private val localUseCase: LocalUseCase
+    private val productUseCase: ProductUseCaseImpl,
+    private val localUseCase: LocalUseCaseImpl
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DetailUIState())
@@ -65,7 +65,7 @@ class DetailViewModel(
         try {
             val entity = CartEntity(
                 id = product?.id?.toLong() ?: 0L,
-                userId = pref?.id,
+                userId = pref?.uid,
                 name = product?.title,
                 price = product?.price,
                 imageID = product?.thumbnail,
@@ -131,7 +131,7 @@ class DetailViewModel(
 
             val entity = FavoriteEntity(
                 id = product?.id?.toLong() ?: 0L,
-                userId = pref?.id,
+                userId = pref?.uid,
                 name = product?.title,
                 price = product?.price,
                 imageID = product?.thumbnail,

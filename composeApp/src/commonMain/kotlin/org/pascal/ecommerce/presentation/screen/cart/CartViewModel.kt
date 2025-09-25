@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import org.pascal.ecommerce.data.preferences.PrefLogin
-import org.pascal.ecommerce.domain.usecase.local.LocalUseCase
-import org.pascal.ecommerce.domain.usecase.transaction.TransactionUseCase
+import org.pascal.ecommerce.domain.usecase.local.LocalUseCaseImpl
+import org.pascal.ecommerce.domain.usecase.transaction.TransactionUseCaseImpl
 import org.pascal.ecommerce.presentation.screen.cart.state.CartUIState
 
 class CartViewModel(
-    private val transactionUseCase: TransactionUseCase,
-    private val localUseCase: LocalUseCase
+    private val transactionUseCase: TransactionUseCaseImpl,
+    private val localUseCase: LocalUseCaseImpl
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CartUIState())
@@ -34,7 +34,7 @@ class CartViewModel(
                     )
                 }            }
             .collect { result ->
-                val filterResult = result.filter { it.userId.toString() == pref?.id }
+                val filterResult = result.filter { it.userId.toString() == pref?.uid }
                 _uiState.update {
                     it.copy(
                         isLoading = false,
