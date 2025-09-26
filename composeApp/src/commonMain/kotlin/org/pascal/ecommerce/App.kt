@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.room.RoomDatabase
 import com.russhwolf.settings.Settings
+import dev.gitlive.firebase.auth.FirebaseAuth
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.pascal.ecommerce.data.local.database.AppDatabase
 import org.pascal.ecommerce.presentation.navigation.RouteScreen

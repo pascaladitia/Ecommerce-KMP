@@ -74,7 +74,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.pascal.ecommerce.PlatformColors
 import org.pascal.ecommerce.presentation.component.button.ButtonComponent
-import org.pascal.ecommerce.presentation.component.dialog.DIALOG_DISSMISS
 import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
 import org.pascal.ecommerce.presentation.component.form.FormEmailComponent
 import org.pascal.ecommerce.presentation.component.form.FormPasswordComponent
@@ -95,7 +94,6 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val loginEvent = remember { viewModel.loginEvent }
 
-    var errorMessage by remember { mutableStateOf("") }
     var isContentVisible by remember { mutableStateOf(false) }
 
     val factory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
@@ -115,7 +113,7 @@ fun LoginScreen(
 
     if (uiState.isError.first) {
         ShowDialog(
-            message = errorMessage,
+            message = uiState.isError.second,
             textButton = stringResource(Res.string.close),
             color = MaterialTheme.colorScheme.primary
         ) {
@@ -141,9 +139,15 @@ fun LoginScreen(
         LocalLoginEvent provides event.copy(
             onLogin = { user, password ->
                 coroutineScope.launch {
-                    viewModel.exeLogin(user, password)
+                    viewModel.loginEmail(user, password)
                 }
             },
+            onGoogle = {
+                coroutineScope.launch {
+                    viewModel.loginGoogle()
+                }
+            },
+            onRegister = {}
         )
     ) {
         LoginContent(isContentVisible = isContentVisible)

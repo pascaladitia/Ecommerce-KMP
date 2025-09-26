@@ -29,7 +29,9 @@ preferenceKtx = "1.2.1"
 peekaboo = "0.5.2"
 sqlite = "2.6.0"
 composeWebviewMultiplatform = "2.0.3"
-firebaseApp = "1.13.0"
+firebaseApp = "2.3.0"
+playServicesAuth = "21.4.0"
+googleServices = "4.4.3"
 
 [libraries]
 
@@ -80,6 +82,7 @@ moko-permission-camera = { module = "dev.icerock.moko:permissions-camera", versi
 compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
 firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "firebaseApp" }
 firebase-app = { module = "dev.gitlive:firebase-app", version.ref = "firebaseApp" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 
 [plugins]
 
@@ -91,3 +94,5 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 buildKonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }
+google-service = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+kotlinCocoapods     = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }

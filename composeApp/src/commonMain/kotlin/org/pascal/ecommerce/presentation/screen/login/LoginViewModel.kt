@@ -1,49 +1,63 @@
 package org.pascal.ecommerce.presentation.screen.login
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import org.pascal.ecommerce.data.preferences.PrefLogin
-import org.pascal.ecommerce.domain.usecase.product.ProductUseCase
+import kotlinx.coroutines.launch
+import org.pascal.ecommerce.domain.usecase.auth.AuthUseCase
 import org.pascal.ecommerce.presentation.screen.login.state.LoginUiState
+import org.pascal.ecommerce.utils.GoogleIdTokenProvider
+import org.pascal.ecommerce.utils.base.AuthResult
 import org.pascal.ecommerce.utils.base.EventAction
 import org.pascal.ecommerce.utils.base.sendSuccess
 
 class LoginViewModel(
-    private val productUseCase: ProductUseCase,
+    private val authUseCase: AuthUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
-    val uiState get() = _uiState.asStateFlow()
+    val uiState = _uiState.asStateFlow()
 
     private val _loginEvent = Channel<EventAction<Boolean>>()
     val loginEvent = _loginEvent
 
-    suspend fun exeLogin(username: String, password: String) {
+    fun setLoading(b: Boolean) = _uiState.update { it.copy(isLoading = b) }
+    fun setError(show: Boolean, msg: String = "") =
+        _uiState.update { it.copy(isError = show to msg) }
+
+    fun loginEmail(email: String, password: String) = viewModelScope.launch {
         setLoading(true)
-
-        if (username == "test" && password == "123456") {
-            setLoading(false)
-            PrefLogin.setIsLogin(true)
-
-            _loginEvent.sendSuccess(true)
-        } else {
-            _uiState.update {
-                it.copy(
-                    isLoading = false,
-                    isError = Pair(true, "Username atau password salah")
-                )
+        when (val res = authUseCase.signInWithEmail(email, password)) {
+            is AuthResult.Success -> {
+                setLoading(false)
+                _loginEvent.sendSuccess(true)
+            }
+            is AuthResult.Error -> {
+                setError(true, res.throwable?.message ?: "Login gagal")
+                setLoading(false)
             }
         }
     }
 
-    fun setLoading(isLoading: Boolean) {
-        _uiState.update { it.copy(isLoading = isLoading) }
-    }
-
-    fun setError(isError: Boolean) {
-        _uiState.update { it.copy(isError = Pair(isError, "")) }
+    fun loginGoogle() = viewModelScope.launch {
+        setLoading(true)
+        val idToken = GoogleIdTokenProvider.getIdToken()
+        if (idToken.isNullOrBlank()) {
+            setError(true, "Google Sign-In dibatalkan")
+            setLoading(false); return@launch
+        }
+        when (val res = authUseCase.signInWithGoogleIdToken(idToken)) {
+            is AuthResult.Success -> {
+                setLoading(false)
+                _loginEvent.sendSuccess(true)
+            }
+            is AuthResult.Error -> {
+                setError(true, res.throwable?.message ?: "Login Google gagal")
+                setLoading(false)
+            }
+        }
     }
 }

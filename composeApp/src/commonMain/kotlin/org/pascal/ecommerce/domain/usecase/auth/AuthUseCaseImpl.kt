@@ -22,6 +22,5 @@ class AuthUseCaseImpl(
         return repo.signOut()
     }
 
-
     override suspend fun currentUser(): UserInfo? = repo.currentUser()
 }

@@ -8,6 +8,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.Settings
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.FirebaseAuth
+import dev.gitlive.firebase.auth.auth
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
 import org.pascal.ecommerce.data.local.database.AppDatabase
@@ -21,6 +24,7 @@ import platform.UIKit.UIColor
 import platform.UIKit.UINavigationBar
 import platform.UIKit.UIScreen
 import platform.UIKit.UIView
+import platform.UIKit.UIViewController
 import platform.UIKit.UIWindow
 
 actual fun createSettings(): Settings {

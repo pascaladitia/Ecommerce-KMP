@@ -11,6 +11,8 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.buildKonfig)
+    alias(libs.plugins.google.service)
+    alias(libs.plugins.kotlinCocoapods)
 }
 
 kotlin {
@@ -20,7 +22,6 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
@@ -28,6 +29,20 @@ kotlin {
             baseName = "ComposeApp"
             isStatic = true
         }
+    }
+
+    cocoapods {
+        ios.deploymentTarget = "13.0"
+        version = "0.1.0"
+        summary = "Ecommerce KMP app"
+        homepage = "https://example.com"
+
+        framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+
+//        pod("GoogleSignIn") { version = "~> 7.0" }
     }
 
     sourceSets {
@@ -88,6 +103,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.androidx.preference.ktx)
             implementation(libs.room.runtime.android)
+            implementation(libs.play.services.auth)
         }
 
         iosMain.dependencies {
@@ -105,7 +121,7 @@ android {
         minSdk = 24
         targetSdk = 36
 
-        applicationId = "org.pascal.ecommerce.androidApp"
+        applicationId = "org.pascal.ecommerce"
         versionCode = 1
         versionName = "1.0.0"
 
@@ -133,7 +149,6 @@ room {
 dependencies {
     with(libs.room.compiler) {
         add("kspAndroid", this)
-        add("kspIosX64", this)
         add("kspIosArm64", this)
         add("kspIosSimulatorArm64", this)
     }
