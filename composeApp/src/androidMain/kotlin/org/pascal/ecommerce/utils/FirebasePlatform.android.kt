@@ -29,7 +29,7 @@ actual object GoogleIdTokenProvider {
         val component = activity as? ComponentActivity
             ?: error("Activity must be a ComponentActivity")
 
-        val serverClientId = "AIzaSyBghHp2MewwZ_76xgqWBS7pNr6amon_LWw"
+        val serverClientId = activity.getString(org.pascal.ecommerce.R.string.default_web_client_id)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(serverClientId)
