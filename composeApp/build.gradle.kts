@@ -21,28 +21,21 @@ kotlin {
         instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
     }
 
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
+    iosArm64()
+    iosSimulatorArm64()
 
     cocoapods {
-        ios.deploymentTarget = "13.0"
+        name = "ComposeApp"
         version = "0.1.0"
         summary = "Ecommerce KMP app"
-        homepage = "https://example.com"
+        homepage = "https://github.com/JetBrains/kotlin"
+        podfile = project.file("../iosApp/Podfile")
+        ios.deploymentTarget = "16.0"
 
         framework {
             baseName = "ComposeApp"
             isStatic = true
         }
-
-//        pod("GoogleSignIn") { version = "~> 7.0" }
     }
 
     sourceSets {
