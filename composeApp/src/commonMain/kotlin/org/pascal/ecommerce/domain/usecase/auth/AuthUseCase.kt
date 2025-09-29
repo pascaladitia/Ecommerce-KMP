@@ -5,7 +5,7 @@ import org.pascal.ecommerce.utils.base.AuthResult
 
 interface AuthUseCase {
     suspend fun signInWithEmail(email: String, password: String): AuthResult<UserInfo>
-    suspend fun signInWithGoogleIdToken(idToken: String): AuthResult<UserInfo>
+    suspend fun signInWithGoogleIdToken(idToken: String, accessToken: String): AuthResult<UserInfo>
     suspend fun signOut(): AuthResult<Unit>
     suspend fun currentUser(): UserInfo?
 }

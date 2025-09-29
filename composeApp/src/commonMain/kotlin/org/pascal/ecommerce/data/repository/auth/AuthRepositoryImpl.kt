@@ -16,8 +16,8 @@ class AuthRepositoryImpl : AuthRepository {
         AuthResult.Error(t)
     }
 
-    override suspend fun signInWithGoogleIdToken(idToken: String): AuthResult<UserInfo> = try {
-        val credential = GoogleAuthProvider.credential(idToken, null)
+    override suspend fun signInWithGoogleIdToken(idToken: String, accessToken: String): AuthResult<UserInfo> = try {
+        val credential = GoogleAuthProvider.credential(idToken, accessToken)
         auth.signInWithCredential(credential)
         AuthResult.Success(currentUser()!!)
     } catch (t: Throwable) {

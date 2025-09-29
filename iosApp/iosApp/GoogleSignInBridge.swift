@@ -19,7 +19,7 @@ func setupGoogleSignInBridge(webClientId: String? = nil) {
         DispatchQueue.main.async {
             guard let presenter = topViewController(),
                   let clientID = FirebaseApp.app()?.options.clientID else {
-                KMPBridge.shared.onGoogleIdTokenReceived(token: nil)
+                KMPBridge.shared.onGoogleTokensReceived(idToken: nil, accessToken: nil)
                 return
             }
 
@@ -30,8 +30,10 @@ func setupGoogleSignInBridge(webClientId: String? = nil) {
             }
 
             GIDSignIn.sharedInstance.signIn(withPresenting: presenter) { result, error in
-                let token = result?.user.idToken?.tokenString
-                KMPBridge.shared.onGoogleIdTokenReceived(token: token)
+                let user = result?.user
+                let idToken: String? = user?.idToken?.tokenString
+                let accessToken: String? = user?.accessToken.tokenString
+                KMPBridge.shared.onGoogleTokensReceived(idToken: idToken, accessToken: accessToken)
             }
         }
     })

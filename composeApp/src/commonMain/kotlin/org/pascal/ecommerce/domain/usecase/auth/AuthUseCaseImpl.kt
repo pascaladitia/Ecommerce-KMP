@@ -14,8 +14,8 @@ class AuthUseCaseImpl(
         return repo.signInWithEmail(email, password)
     }
 
-    override suspend fun signInWithGoogleIdToken(idToken: String): AuthResult<UserInfo> {
-        return repo.signInWithGoogleIdToken(idToken)
+    override suspend fun signInWithGoogleIdToken(idToken: String, accessToken: String): AuthResult<UserInfo> {
+        return repo.signInWithGoogleIdToken(idToken, accessToken)
     }
 
     override suspend fun signOut(): AuthResult<Unit> {

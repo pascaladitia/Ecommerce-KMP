@@ -44,12 +44,12 @@ class LoginViewModel(
 
     fun loginGoogle() = viewModelScope.launch {
         setLoading(true)
-        val idToken = GoogleIdTokenProvider.getIdToken()
-        if (idToken.isNullOrBlank()) {
+        val token = GoogleIdTokenProvider.getTokens()
+        if (token?.idToken.isNullOrBlank() || token.accessToken.isBlank()) {
             setError(true, "Google Sign-In dibatalkan")
             setLoading(false); return@launch
         }
-        when (val res = authUseCase.signInWithGoogleIdToken(idToken)) {
+        when (val res = authUseCase.signInWithGoogleIdToken(token.idToken, token.accessToken)) {
             is AuthResult.Success -> {
                 setLoading(false)
                 _loginEvent.sendSuccess(true)
