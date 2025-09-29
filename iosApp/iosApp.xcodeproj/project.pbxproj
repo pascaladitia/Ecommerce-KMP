@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1F254E4AA06D26E4E0A9DDED /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E735AACF0C1DEA3411C393 /* Pods_iosApp.framework */; };
 		2341B8372E86123F0067D730 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2341B8362E86123F0067D730 /* GoogleService-Info.plist */; };
+		A30900EFFA832FB107170BA3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3090A13F289951ACFD72A20 /* AppDelegate.swift */; };
+		A309095BF1FB8BB430DF2867 /* GoogleSignInBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30903320556695C25FAC52A /* GoogleSignInBridge.swift */; };
 		A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93A953A29CC810C00F8E227 /* iosApp.swift */; };
 		A93A953F29CC810D00F8E227 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A93A953E29CC810D00F8E227 /* Assets.xcassets */; };
 		A93A954229CC810D00F8E227 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A93A954129CC810D00F8E227 /* Preview Assets.xcassets */; };
@@ -19,6 +21,8 @@
 		2341B8362E86123F0067D730 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		24BAC0D596A1AE4FBAB3BB97 /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
 		39EF41874CF5981FFAAC1F7A /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
+		A30903320556695C25FAC52A /* GoogleSignInBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleSignInBridge.swift; sourceTree = "<group>"; };
+		A3090A13F289951ACFD72A20 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A93A953729CC810C00F8E227 /* Ecommerce KMP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ecommerce KMP.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93A953A29CC810C00F8E227 /* iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosApp.swift; sourceTree = "<group>"; };
 		A93A953E29CC810D00F8E227 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -54,6 +58,7 @@
 				A93A953829CC810C00F8E227 /* Products */,
 				A3DF04048F22F75EF256C947 /* Pods */,
 				C71886027D8223AB8922EA53 /* Frameworks */,
+				A3090A13F289951ACFD72A20 /* AppDelegate.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -72,6 +77,7 @@
 				A93A953A29CC810C00F8E227 /* iosApp.swift */,
 				A93A953E29CC810D00F8E227 /* Assets.xcassets */,
 				A93A954029CC810D00F8E227 /* Preview Content */,
+				A30903320556695C25FAC52A /* GoogleSignInBridge.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -243,6 +249,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */,
+				A309095BF1FB8BB430DF2867 /* GoogleSignInBridge.swift in Sources */,
+				A30900EFFA832FB107170BA3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

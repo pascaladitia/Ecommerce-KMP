@@ -1,31 +1,25 @@
 import SwiftUI
 import ComposeApp
-import FirebaseCore
 
 @main
-struct ComposeApp: App {
+struct IosApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     init() {
         HelperKt.doInitKoin()
-
-        if FirebaseApp.app() == nil {
-            FirebaseApp.configure()
-        }
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView().ignoresSafeArea(.all)
+            ContentView()
+                .ignoresSafeArea(.all)
         }
     }
 }
 
 struct ContentView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        return MainKt.MainViewController()
+        MainKt.MainViewController()
     }
-
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        // Updates will be handled by Compose
-    }
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) { }
 }

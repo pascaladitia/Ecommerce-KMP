@@ -110,6 +110,7 @@ kotlin {
             implementation(libs.androidx.preference.ktx)
             implementation(libs.room.runtime.android)
             implementation(libs.play.services.auth)
+            implementation(project.dependencies.platform("com.google.firebase:firebase-bom:33.5.1"))
         }
 
         iosMain.dependencies {
