@@ -2,7 +2,7 @@ package org.pascal.ecommerce.domain.usecase.auth
 
 import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
 import org.pascal.ecommerce.data.repository.auth.AuthRepository
-import org.pascal.ecommerce.utils.base.AuthResult
+import org.pascal.ecommerce.utils.base.Result
 
 class AuthUseCaseImpl(
     private val repo: AuthRepository
@@ -10,15 +10,15 @@ class AuthUseCaseImpl(
     override suspend fun signInWithEmail(
         email: String,
         password: String
-    ): AuthResult<UserInfo> {
+    ): Result<UserInfo> {
         return repo.signInWithEmail(email, password)
     }
 
-    override suspend fun signInWithGoogleIdToken(idToken: String, accessToken: String): AuthResult<UserInfo> {
+    override suspend fun signInWithGoogleIdToken(idToken: String, accessToken: String): Result<UserInfo> {
         return repo.signInWithGoogleIdToken(idToken, accessToken)
     }
 
-    override suspend fun signOut(): AuthResult<Unit> {
+    override suspend fun signOut(): Result<Unit> {
         return repo.signOut()
     }
 

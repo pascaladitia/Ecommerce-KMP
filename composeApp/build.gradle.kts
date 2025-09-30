@@ -91,6 +91,7 @@ kotlin {
             implementation(libs.compose.webview.multiplatform)
             implementation(libs.firebase.auth)
             implementation(libs.firebase.app)
+            implementation(libs.firebase.firestore)
         }
 
         commonTest.dependencies {
@@ -110,7 +111,7 @@ kotlin {
             implementation(libs.androidx.preference.ktx)
             implementation(libs.room.runtime.android)
             implementation(libs.play.services.auth)
-            implementation(project.dependencies.platform("com.google.firebase:firebase-bom:33.5.1"))
+            implementation(project.dependencies.platform(libs.firebase.bom))
         }
 
         iosMain.dependencies {

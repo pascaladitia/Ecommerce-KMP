@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import org.pascal.ecommerce.domain.usecase.auth.AuthUseCase
 import org.pascal.ecommerce.presentation.screen.login.state.LoginUiState
 import org.pascal.ecommerce.utils.GoogleIdTokenProvider
-import org.pascal.ecommerce.utils.base.AuthResult
+import org.pascal.ecommerce.utils.base.Result
 import org.pascal.ecommerce.utils.base.EventAction
 import org.pascal.ecommerce.utils.base.sendSuccess
 
@@ -31,11 +31,11 @@ class LoginViewModel(
     fun loginEmail(email: String, password: String) = viewModelScope.launch {
         setLoading(true)
         when (val res = authUseCase.signInWithEmail(email, password)) {
-            is AuthResult.Success -> {
+            is Result.Success -> {
                 setLoading(false)
                 _loginEvent.sendSuccess(true)
             }
-            is AuthResult.Error -> {
+            is Result.Error -> {
                 setError(true, res.throwable?.message ?: "Login gagal")
                 setLoading(false)
             }
@@ -50,11 +50,11 @@ class LoginViewModel(
             setLoading(false); return@launch
         }
         when (val res = authUseCase.signInWithGoogleIdToken(token.idToken, token.accessToken)) {
-            is AuthResult.Success -> {
+            is Result.Success -> {
                 setLoading(false)
                 _loginEvent.sendSuccess(true)
             }
-            is AuthResult.Error -> {
+            is Result.Error -> {
                 setError(true, res.throwable?.message ?: "Login Google gagal")
                 setLoading(false)
             }

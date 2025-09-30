@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import org.pascal.ecommerce.data.preferences.PrefLogin
 import org.pascal.ecommerce.domain.usecase.local.LocalUseCaseImpl
-import org.pascal.ecommerce.domain.usecase.transaction.TransactionUseCaseImpl
+import org.pascal.ecommerce.domain.usecase.order.OrderUseCaseImpl
 import org.pascal.ecommerce.presentation.screen.cart.state.CartUIState
 
 class CartViewModel(
-    private val transactionUseCase: TransactionUseCaseImpl,
+    private val transactionUseCase: OrderUseCaseImpl,
     private val localUseCase: LocalUseCaseImpl
 ) : ViewModel() {
 

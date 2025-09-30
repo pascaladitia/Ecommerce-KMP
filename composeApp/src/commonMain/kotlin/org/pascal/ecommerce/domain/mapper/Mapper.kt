@@ -5,7 +5,7 @@ import org.pascal.ecommerce.data.remote.dtos.product.ProductResponse
 import org.pascal.ecommerce.data.remote.dtos.transaction.TransactionResponse
 import org.pascal.ecommerce.domain.model.BaseProduct
 import org.pascal.ecommerce.domain.model.Product
-import org.pascal.ecommerce.domain.model.Transaction
+import org.pascal.ecommerce.domain.model.Order
 
 fun ProductResponse.toDomain(): BaseProduct {
     return BaseProduct(
@@ -68,8 +68,8 @@ fun Product.toEntity(): ProductEntity {
     )
 }
 
-fun TransactionResponse.toDomain(): Transaction {
-    return Transaction(
+fun TransactionResponse.toDomain(): Order {
+    return Order(
         redirectUrl = this.redirectUrl.orEmpty()
     )
 }

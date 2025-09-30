@@ -3,6 +3,7 @@ package org.pascal.ecommerce.di
 import androidx.room.RoomDatabase
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
+import dev.gitlive.firebase.firestore.firestore
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -20,6 +21,8 @@ import org.pascal.ecommerce.data.repository.auth.AuthRepository
 import org.pascal.ecommerce.data.repository.auth.AuthRepositoryImpl
 import org.pascal.ecommerce.data.repository.product.ProductRepository
 import org.pascal.ecommerce.data.repository.product.ProductRepositoryImpl
+import org.pascal.ecommerce.data.repository.order.OrderRepository
+import org.pascal.ecommerce.data.repository.order.OrderRepositoryImpl
 import org.pascal.ecommerce.data.repository.transaction.TransactionRepository
 import org.pascal.ecommerce.data.repository.transaction.TransactionRepositoryImpl
 import org.pascal.ecommerce.domain.usecase.auth.AuthUseCase
@@ -28,6 +31,8 @@ import org.pascal.ecommerce.domain.usecase.local.LocalUseCase
 import org.pascal.ecommerce.domain.usecase.local.LocalUseCaseImpl
 import org.pascal.ecommerce.domain.usecase.product.ProductUseCase
 import org.pascal.ecommerce.domain.usecase.product.ProductUseCaseImpl
+import org.pascal.ecommerce.domain.usecase.order.OrderUseCase
+import org.pascal.ecommerce.domain.usecase.order.OrderUseCaseImpl
 import org.pascal.ecommerce.domain.usecase.transaction.TransactionUseCase
 import org.pascal.ecommerce.domain.usecase.transaction.TransactionUseCaseImpl
 import org.pascal.ecommerce.getDatabaseBuilder
@@ -39,6 +44,7 @@ import org.pascal.ecommerce.presentation.screen.login.LoginViewModel
 
 val appModule = module {
     single { Firebase.auth }
+    single { Firebase.firestore }
     single<RoomDatabase.Builder<AppDatabase>> { getDatabaseBuilder() }
     single<AppDatabase> { getRoomDatabase(get()) }
 
@@ -48,13 +54,15 @@ val appModule = module {
     singleOf(::ProductLocalRepositoryImpl) { bind<ProductLocalRepository>() }
 
     singleOf(::ProductRepositoryImpl) { bind<ProductRepository>() }
-    singleOf(::TransactionRepositoryImpl) { bind<TransactionRepository>() }
+    singleOf(::OrderRepositoryImpl) { bind<OrderRepository>() }
     singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
+    singleOf(::TransactionRepositoryImpl) { bind<TransactionRepository>() }
 
     singleOf(::LocalUseCaseImpl) { bind<LocalUseCase>() }
     singleOf(::ProductUseCaseImpl) { bind<ProductUseCase>() }
-    singleOf(::TransactionUseCaseImpl) { bind<TransactionUseCase>() }
+    singleOf(::OrderUseCaseImpl) { bind<OrderUseCase>() }
     singleOf(::AuthUseCaseImpl) { bind<AuthUseCase>() }
+    singleOf(::TransactionUseCaseImpl) { bind<TransactionUseCase>() }
 
     singleOf(::LoginViewModel)
     singleOf(::HomeViewModel)
