@@ -1,5 +1,6 @@
 [versions]
 
+itext7Core = "8.0.3"
 kotlin = "2.2.20"
 compose = "1.9.0-rc01"
 agp = "8.10.0"
@@ -39,6 +40,7 @@ firebase-bom = "33.5.1"
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-uitest-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-uitest-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }
+itext7-core = { module = "com.itextpdf:itext7-core", version.ref = "itext7Core" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }

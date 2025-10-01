@@ -41,6 +41,9 @@ import org.pascal.ecommerce.presentation.screen.detail.DetailViewModel
 import org.pascal.ecommerce.presentation.screen.favorite.FavoriteViewModel
 import org.pascal.ecommerce.presentation.screen.home.HomeViewModel
 import org.pascal.ecommerce.presentation.screen.login.LoginViewModel
+import org.pascal.ecommerce.presentation.screen.profile.ProfileViewModel
+import org.pascal.ecommerce.presentation.screen.register.RegisterViewModel
+import org.pascal.ecommerce.presentation.screen.report.ReportViewModel
 
 val appModule = module {
     single { Firebase.auth }
@@ -65,8 +68,11 @@ val appModule = module {
     singleOf(::TransactionUseCaseImpl) { bind<TransactionUseCase>() }
 
     singleOf(::LoginViewModel)
+    singleOf(::RegisterViewModel)
     singleOf(::HomeViewModel)
     singleOf(::FavoriteViewModel)
     singleOf(::CartViewModel)
     singleOf(::DetailViewModel)
+    singleOf(::ProfileViewModel)
+    singleOf(::ReportViewModel)
 }
