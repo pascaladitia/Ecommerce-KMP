@@ -16,6 +16,13 @@ class AuthRepositoryImpl : AuthRepository {
         Result.Error(t)
     }
 
+    override suspend fun signUpWithEmail(email: String, password: String): Result<UserInfo> = try {
+        auth.createUserWithEmailAndPassword(email, password)
+        Result.Success(currentUser()!!)
+    } catch (t: Throwable) {
+        Result.Error(t)
+    }
+
     override suspend fun signInWithGoogleIdToken(idToken: String, accessToken: String): Result<UserInfo> = try {
         val credential = GoogleAuthProvider.credential(idToken, accessToken)
         auth.signInWithCredential(credential)

@@ -14,6 +14,13 @@ class AuthUseCaseImpl(
         return repo.signInWithEmail(email, password)
     }
 
+    override suspend fun signUpWithEmail(
+        email: String,
+        password: String
+    ): Result<UserInfo> {
+        return repo.signUpWithEmail(email, password)
+    }
+
     override suspend fun signInWithGoogleIdToken(idToken: String, accessToken: String): Result<UserInfo> {
         return repo.signInWithGoogleIdToken(idToken, accessToken)
     }

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.pascal.ecommerce.data.preferences.PrefLogin
 import org.pascal.ecommerce.domain.usecase.auth.AuthUseCase
 import org.pascal.ecommerce.presentation.screen.login.state.LoginUiState
 import org.pascal.ecommerce.utils.GoogleIdTokenProvider
@@ -33,6 +34,10 @@ class LoginViewModel(
         when (val res = authUseCase.signInWithEmail(email, password)) {
             is Result.Success -> {
                 setLoading(false)
+
+                PrefLogin.setIsLogin(true)
+                PrefLogin.setLoginResponse(res.data)
+
                 _loginEvent.sendSuccess(true)
             }
             is Result.Error -> {

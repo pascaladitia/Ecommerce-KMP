@@ -18,7 +18,7 @@ class RegisterViewModel(
     suspend fun loadRegister(name: String, email: String, password: String) {
         _uiState.update { it.copy(isLoading = true) }
 
-        when (val result = authUseCase.signInWithEmail(email, password)) {
+        when (val result = authUseCase.signUpWithEmail(email, password)) {
             is Result.Success -> {
                 _uiState.update {
                     it.copy(
