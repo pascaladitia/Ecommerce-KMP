@@ -1,5 +1,7 @@
 package org.pascal.ecommerce.utils
 
+import android.content.ActivityNotFoundException
+import android.content.ClipData
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -8,6 +10,7 @@ import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.core.graphics.scale
 import org.pascal.ecommerce.ContextUtils
@@ -30,27 +33,46 @@ actual suspend fun generatePdfAndOpen(
     fileName: String,
     logoBytes: ByteArray?
 ) {
-    val context = ContextUtils.context
-    val pdfBytes = createReportPdfBytes(
-        reportInfo = reportInfo,
-        products = products,
-        logoBytes = logoBytes
-    )
+    try {
+        val context = ContextUtils.context
+        val pdfBytes = createReportPdfBytes(
+            reportInfo = reportInfo,
+            products = products,
+            logoBytes = logoBytes
+        )
 
-    val docsDir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-    val outFile = File(docsDir, fileName)
-    FileOutputStream(outFile).use { it.write(pdfBytes) }
+        val docsDir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+            ?: throw IllegalStateException("DIRECTORY_DOCUMENTS not available")
+        val outFile = File(docsDir, fileName)
+        FileOutputStream(outFile).use { it.write(pdfBytes) }
 
-    val uri: Uri = FileProvider.getUriForFile(
-        context,
-        "${context.packageName}.provider",
-        outFile
-    )
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-        setDataAndType(uri, "application/pdf")
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.provider",
+            outFile
+        )
+
+        val viewIntent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "application/pdf")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            clipData = ClipData.newRawUri("PDF", uri)
+        }
+
+        val chooser = Intent.createChooser(viewIntent, "Open PDF With:").apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        context.startActivity(chooser)
+
+    } catch (e: ActivityNotFoundException) {
+        Log.e("Tag report", "PDF Viewer not found")
+    } catch (e: Exception) {
+        Log.e("Tag report", "Failed open PDF : ${e.message}", e)
     }
-    context.startActivity(Intent.createChooser(intent, "Buka PDF dengan:"))
 }
+
 
 actual fun createReportPdfBytes(
     reportInfo: ReportInfo,

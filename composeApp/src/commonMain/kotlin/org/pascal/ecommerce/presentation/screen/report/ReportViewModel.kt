@@ -55,7 +55,8 @@ class ReportViewModel(
             _uiState.update { it.copy(isLoading = true) }
 
             runCatching {
-                val info = ReportInfo("", "")
+                val pref = PrefLogin.getLoginResponse()
+                val info = ReportInfo(pref?.displayName.orEmpty(), pref?.email.orEmpty())
                 val fileName = "Report_${currentFormattedDate()}.pdf"
                 val logoBytes = tryLoadLogoBytes()
 
