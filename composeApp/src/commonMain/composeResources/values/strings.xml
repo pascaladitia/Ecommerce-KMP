@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">My Ecommerce</string>
     <string name="cyclone">Cyclone</string>
     <string name="open_github">Open github</string>
     <string name="run">Run</string>
@@ -27,4 +28,14 @@ while Max Air cushioning adds comfort to the journey.
     <string name="connection_online">Yeay, Your connection is online!</string>
     <string name="detection_failed">Verified Smile Detection Failed!</string>
     <string name="detection_success">Verified Smile Detection Success!</string>
+    <string name="login">Log In</string>
+    <string name="google">Google</string>
+
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+
+    <string name="hint_email">Input your email</string>
+    <string name="hint_password">Input your password</string>
+
+    <string name="message_dont_have_account">Don't have an account? Register here!</string>
 </resources>

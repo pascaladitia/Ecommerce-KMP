@@ -11,8 +11,8 @@ import org.pascal.ecommerce.data.preferences.PrefLogin
 import org.pascal.ecommerce.domain.usecase.auth.AuthUseCase
 import org.pascal.ecommerce.presentation.screen.login.state.LoginUiState
 import org.pascal.ecommerce.utils.GoogleIdTokenProvider
-import org.pascal.ecommerce.utils.base.Result
 import org.pascal.ecommerce.utils.base.EventAction
+import org.pascal.ecommerce.utils.base.Result
 import org.pascal.ecommerce.utils.base.sendSuccess
 
 class LoginViewModel(
@@ -41,7 +41,7 @@ class LoginViewModel(
                 _loginEvent.sendSuccess(true)
             }
             is Result.Error -> {
-                setError(true, res.throwable?.message ?: "Login gagal")
+                setError(true, res.throwable?.message ?: "Login Failed")
                 setLoading(false)
             }
         }
@@ -51,7 +51,7 @@ class LoginViewModel(
         setLoading(true)
         val token = GoogleIdTokenProvider.getTokens()
         if (token?.idToken.isNullOrBlank() || token.accessToken.isBlank()) {
-            setError(true, "Google Sign-In dibatalkan")
+            setError(true, "Google Sign-In Canceled")
             setLoading(false); return@launch
         }
         when (val res = authUseCase.signInWithGoogleIdToken(token.idToken, token.accessToken)) {
@@ -60,7 +60,7 @@ class LoginViewModel(
                 _loginEvent.sendSuccess(true)
             }
             is Result.Error -> {
-                setError(true, res.throwable?.message ?: "Login Google gagal")
+                setError(true, res.throwable?.message ?: "Login Google Failed")
                 setLoading(false)
             }
         }

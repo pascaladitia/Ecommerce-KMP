@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +26,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.Home
 import ecommerce_kmp.composeapp.generated.resources.Res
 import ecommerce_kmp.composeapp.generated.resources.ic_logo
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -32,7 +34,7 @@ fun ButtonComponent(
     modifier: Modifier = Modifier,
     text: String,
     isIcon: Int = 0,
-    icon: ImageVector = FeatherIcons.Home,
+    icon: DrawableResource = Res.drawable.ic_logo,
     color: Color = MaterialTheme.colorScheme.primary,
     textColor: Color = Color.White,
     onClick: () -> Unit
@@ -40,7 +42,7 @@ fun ButtonComponent(
     ElevatedButton(
         modifier = modifier
             .fillMaxWidth()
-            .height(40.dp),
+            .heightIn(min = 48.dp),
         shape = RoundedCornerShape(8.dp),
         elevation = ButtonDefaults.elevatedButtonElevation(
             defaultElevation = 0.dp
@@ -54,7 +56,7 @@ fun ButtonComponent(
             if (isIcon == 1) {
                 Icon(
                     modifier = Modifier.size(24.dp),
-                    painter = painterResource(Res.drawable.ic_logo),
+                    painter = painterResource(icon),
                     contentDescription = null,
                     tint = Color.White
                 )
@@ -64,14 +66,14 @@ fun ButtonComponent(
                 text = text,
                 style = MaterialTheme.typography.titleSmall.copy(
                     color = textColor,
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.Bold
                 )
             )
             if (isIcon == 2) {
                 Spacer(modifier = Modifier.width(10.dp))
                 Icon(
                     modifier = Modifier.size(24.dp),
-                    imageVector = icon,
+                    painter = painterResource(icon),
                     contentDescription = null,
                     tint = Color.White
                 )
@@ -86,12 +88,13 @@ fun ButtonOutlineComponent(
     text: String,
     isIcon: Int = 0,
     color: Color = MaterialTheme.colorScheme.primary,
+    icon: DrawableResource = Res.drawable.ic_logo,
     onClick: () -> Unit
 ) {
     OutlinedIconButton(
         modifier = modifier
             .fillMaxWidth()
-            .height(40.dp),
+            .heightIn(min = 48.dp),
         border = BorderStroke(1.dp, color),
         shape = RoundedCornerShape(8.dp),
         onClick = { onClick() },
@@ -100,7 +103,7 @@ fun ButtonOutlineComponent(
             if (isIcon == 1) {
                 Icon(
                     modifier = Modifier.size(24.dp),
-                    painter = painterResource(Res.drawable.ic_logo),
+                    painter = painterResource(icon),
                     contentDescription = null,
                     tint = color
                 )
@@ -117,7 +120,7 @@ fun ButtonOutlineComponent(
                 Spacer(modifier = Modifier.width(16.dp))
                 Icon(
                     modifier = Modifier.size(24.dp),
-                    painter = painterResource(Res.drawable.ic_logo),
+                    painter = painterResource(icon),
                     contentDescription = null,
                     tint = color
                 )

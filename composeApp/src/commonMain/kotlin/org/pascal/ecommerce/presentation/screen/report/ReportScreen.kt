@@ -36,6 +36,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.ChevronLeft
 import compose.icons.feathericons.Download
 import ecommerce_kmp.composeapp.generated.resources.Res
+import ecommerce_kmp.composeapp.generated.resources.ic_logo
 import ecommerce_kmp.composeapp.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -200,7 +201,7 @@ fun ReportContent(
             ButtonComponent(
                 text = "Download",
                 isIcon = 1,
-                icon = FeatherIcons.Download
+                icon = Res.drawable.ic_logo
             ) {
                 event.onDownload(product)
             }

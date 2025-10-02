@@ -12,7 +12,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,8 +26,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,8 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
@@ -62,10 +57,18 @@ import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import ecommerce_kmp.composeapp.generated.resources.Res
+import ecommerce_kmp.composeapp.generated.resources.app_name
 import ecommerce_kmp.composeapp.generated.resources.bgg_orange
 import ecommerce_kmp.composeapp.generated.resources.close
+import ecommerce_kmp.composeapp.generated.resources.google
 import ecommerce_kmp.composeapp.generated.resources.google_logo
+import ecommerce_kmp.composeapp.generated.resources.hint_email
+import ecommerce_kmp.composeapp.generated.resources.hint_password
+import ecommerce_kmp.composeapp.generated.resources.label_email
+import ecommerce_kmp.composeapp.generated.resources.label_password
+import ecommerce_kmp.composeapp.generated.resources.login
 import ecommerce_kmp.composeapp.generated.resources.logo
+import ecommerce_kmp.composeapp.generated.resources.message_dont_have_account
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -77,6 +80,7 @@ import org.pascal.ecommerce.presentation.component.button.ButtonComponent
 import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
 import org.pascal.ecommerce.presentation.component.form.FormEmailComponent
 import org.pascal.ecommerce.presentation.component.form.FormPasswordComponent
+import org.pascal.ecommerce.presentation.component.screenUtils.CardComponent
 import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
 import org.pascal.ecommerce.presentation.screen.login.state.LocalLoginEvent
 import org.pascal.ecommerce.theme.AppTheme
@@ -229,9 +233,9 @@ fun LoginContent(
                 Spacer(Modifier.width(8.dp))
 
                 Text(
-                    text = "My Ecommerce",
+                    text = stringResource(Res.string.app_name),
                     style = MaterialTheme.typography.headlineMedium.copy(
-                        color = MaterialTheme.colorScheme.background
+                        color = Color.White
                     )
                 )
             }
@@ -246,18 +250,15 @@ fun LoginContent(
             enter = fadeIn(tween(durationMillis = 500)) + slideInHorizontally(),
             exit = fadeOut(tween(durationMillis = 500)) + slideOutHorizontally()
         ) {
-            Column(
+            CardComponent(
                 modifier = Modifier
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 16.dp)
                     .shadow(50.dp, RoundedCornerShape(16.dp))
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White, RoundedCornerShape(16.dp))
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp)
             ) {
                 FormEmailComponent(
-                    title = "Email / No. Telepon",
-                    hintText = "Masukan Email atau No. Telepon",
+                    title = stringResource(Res.string.label_email),
+                    hintText = stringResource(Res.string.hint_email),
                     value = user,
                     isShowTitle = true,
                     onValueChange = {
@@ -267,11 +268,11 @@ fun LoginContent(
                     isError = isUserError
                 )
 
-                Spacer(modifier = Modifier.height(17.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 FormPasswordComponent(
-                    title = "Password",
-                    hintText = "Masukan Password",
+                    title = stringResource(Res.string.label_password),
+                    hintText = stringResource(Res.string.hint_password),
                     value = password,
                     isShowTitle = true,
                     onValueChange = {
@@ -298,7 +299,7 @@ fun LoginContent(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 ButtonComponent(
-                    text = "Log In"
+                    text = stringResource(Res.string.login)
                 ) {
                     if (user.isBlank()) {
                         isUserError = true
@@ -315,35 +316,13 @@ fun LoginContent(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
-                    onClick = { event.onGoogle() },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Red),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .size(height = 55.dp, width = 150.dp)
-
+                ButtonComponent(
+                    text = stringResource(Res.string.google),
+                    isIcon = 1,
+                    icon = Res.drawable.google_logo,
+                    color = MaterialTheme.colorScheme.error
                 ) {
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-
-                    ) {
-                        Image(
-                            painter = painterResource(Res.drawable.google_logo),
-                            null,
-                            modifier = Modifier.size(15.dp),
-                            colorFilter = ColorFilter.tint(White)
-                        )
-                        Text(
-                            text = "Google",
-                            modifier = Modifier.padding(start = 8.dp),
-                            fontSize = 17.sp
-                        )
-                    }
+                    event.onGoogle()
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -353,9 +332,9 @@ fun LoginContent(
                         .fillMaxWidth()
                         .clip(CircleShape)
                         .clickable { event.onRegister() },
-                    text = "Belum punya akun? Register disini!",
+                    text = stringResource(Res.string.message_dont_have_account),
                     style = MaterialTheme.typography.labelMedium.copy(
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     textAlign = TextAlign.Center
                 )
@@ -391,7 +370,7 @@ fun LoginContent(
                 Text(
                     text = "APK Version ${getAppInfo().versionName}",
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp
                     ),
                     textAlign = TextAlign.Center
