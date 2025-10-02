@@ -86,7 +86,8 @@ import org.pascal.ecommerce.utils.getAppInfo
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = koinInject<LoginViewModel>(),
-    onLogin: () -> Unit
+    onLogin: () -> Unit,
+    onRegister: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val event = LocalLoginEvent.current
@@ -147,7 +148,7 @@ fun LoginScreen(
                     viewModel.loginGoogle()
                 }
             },
-            onRegister = {}
+            onRegister = onRegister
         )
     ) {
         LoginContent(isContentVisible = isContentVisible)

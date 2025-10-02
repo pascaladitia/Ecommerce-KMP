@@ -70,6 +70,9 @@ fun RouteScreen(
                             }
                             launchSingleTop = true
                         }
+                    },
+                    onRegister = {
+                        navController.navigate(Screen.RegisterScreen.route)
                     }
                 )
             }
