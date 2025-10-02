@@ -87,22 +87,25 @@ fun DetailScreen(
         viewModel.loadProductsDetail(productId)
     }
 
+    LaunchedEffect(uiState.isSuccess) {
+        if (uiState.isSuccess) onNavBack()
+    }
+
+    if (uiState.isLoading) LoadingScreen()
+    if (uiState.isError) {
+        ShowDialog(
+            message = uiState.message,
+            textButton = stringResource(Res.string.close),
+            color = MaterialTheme.colorScheme.primary
+        ) {
+            viewModel.setError(false)
+        }
+    }
+
     Surface(
         modifier = modifier.padding(paddingValues),
         color = MaterialTheme.colorScheme.background
     ) {
-        if (uiState.isSuccess) onNavBack()
-        if (uiState.isLoading) LoadingScreen()
-        if (uiState.isError) {
-            ShowDialog(
-                message = uiState.message,
-                textButton = stringResource(Res.string.close),
-                color = MaterialTheme.colorScheme.primary
-            ) {
-                viewModel.setError(false)
-            }
-        }
-
         CompositionLocalProvider(
             LocalDetailEvent provides event.copy(
                 onCart = {

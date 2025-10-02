@@ -1,5 +1,6 @@
 package org.pascal.ecommerce.data.remote.api
 
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
@@ -9,12 +10,15 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.util.date.getTimeMillis
 import io.ktor.util.encodeBase64
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import org.koin.core.annotation.Single
 import org.pascal.ecommerce.data.remote.client
-import org.pascal.ecommerce.data.remote.dtos.rate.UsdRateResponse
-import org.pascal.ecommerce.data.remote.dtos.transaction.TransactionResponse
 import org.pascal.ecommerce.data.remote.dtos.transaction.TransactionDetails
 import org.pascal.ecommerce.data.remote.dtos.transaction.TransactionRequest
+import org.pascal.ecommerce.data.remote.dtos.transaction.TransactionResponse
 import org.pascal.ecommerce.utils.Constant
 import org.pascal.ecommerce.utils.base.handleApi
 import kotlin.math.roundToInt
@@ -35,7 +39,7 @@ object TransactionApi {
 
         val authHeader = "Basic " + ("${Constant.MIDTRANS_SERVER}:").encodeBase64()
 
-        return client.post("https://app.sandbox.midtrans.com/snap/v1/transactions") {
+        return client.post(Constant.SNAP_URL) {
             contentType(ContentType.Application.Json)
             setBody(body)
             headers {
@@ -45,7 +49,9 @@ object TransactionApi {
     }
 
     suspend fun getUsdToIdrRate(): Double {
-        val result: UsdRateResponse = client.get(Constant.USD_URL).handleApi()
-        return result.rates["IDR"] ?: 15000.0
+        val response: JsonObject = client.get(Constant.USD_URL).body()
+        val rates = response["rates"]?.jsonObject
+        val idr = rates?.get("IDR")?.jsonPrimitive?.doubleOrNull
+        return idr ?: 15000.0
     }
 }

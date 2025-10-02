@@ -6,5 +6,5 @@ object Constant {
 
     const val MIDTRANS_SERVER = "YOUR_SERVER_KEY"
     const val SNAP_URL = "https://app.sandbox.midtrans.com/snap/v1/transactions"
-    const val USD_URL = "https://api.exchangerate.host/latest?base=USD"
+    const val USD_URL = "https://api.frankfurter.app/latest?from=USD&to=IDR"
 }

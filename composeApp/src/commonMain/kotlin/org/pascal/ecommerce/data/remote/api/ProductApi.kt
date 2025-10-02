@@ -16,7 +16,7 @@ object ProductApi {
     }
 
     suspend fun getProductByCategory(body: String): ProductResponse {
-        return client.post("${BuildKonfig.BASE_URL}/products/category/$body").handleApi()
+        return client.get("${BuildKonfig.BASE_URL}/products/category/$body").handleApi()
     }
 
     suspend fun getProductById(id: Int): ProductEntity {

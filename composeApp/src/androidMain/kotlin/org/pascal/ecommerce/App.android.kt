@@ -1,7 +1,6 @@
 package org.pascal.ecommerce
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,6 +18,7 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.initialize
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.GlobalContext
 import org.koin.core.logger.Level
 import org.pascal.ecommerce.data.local.database.AppDatabase
 import org.pascal.ecommerce.di.initKoin
@@ -34,9 +34,11 @@ class AppActivity : ComponentActivity() {
         Firebase.initialize(this)
 
         ContextUtils.setContext(context = this)
-        initKoin {
-            androidLogger(level = Level.NONE)
-            androidContext(androidContext = this@AppActivity)
+        if (GlobalContext.getOrNull() == null) {
+            initKoin {
+                androidLogger(level = Level.NONE)
+                androidContext(this@AppActivity)
+            }
         }
     }
 }
