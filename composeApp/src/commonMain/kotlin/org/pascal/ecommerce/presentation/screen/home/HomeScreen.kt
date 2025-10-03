@@ -24,6 +24,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -57,12 +59,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
-import compose.icons.FeatherIcons
-import compose.icons.feathericons.Bookmark
 import ecommerce_kmp.composeapp.generated.resources.Res
 import ecommerce_kmp.composeapp.generated.resources.close
 import ecommerce_kmp.composeapp.generated.resources.connection_offline
 import ecommerce_kmp.composeapp.generated.resources.filter_list
+import ecommerce_kmp.composeapp.generated.resources.our
+import ecommerce_kmp.composeapp.generated.resources.products
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
@@ -101,49 +103,49 @@ fun HomeScreen(
         viewModel.loadProduct()
     }
 
-    Surface(
-        modifier = modifier.padding(paddingValues),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        if (uiState.isLoading) LoadingScreen()
+    if (uiState.isLoading) LoadingScreen()
 
-        if (uiState.isError.first) {
-            ShowDialog(
-                message = uiState.isError.second,
-                textButton = stringResource(Res.string.close)
-            ) {
-                viewModel.setError(false)
-            }
-        }
-
-        PullRefreshComponent(
-            onRefresh = {
-                viewModel.loadProduct()
-            }
+    if (uiState.isError.first) {
+        ShowDialog(
+            message = uiState.isError.second,
+            textButton = stringResource(Res.string.close)
         ) {
-            CompositionLocalProvider(
-                LocalHomeEvent provides event.copy(
-                    onSearch = {
-                        viewModel.searchProduct(it)
-                    },
-                    onCategory = {
-                        coroutine.launch {
-                            if (isOnline()) {
-                                viewModel.loadProduct(it)
-                            } else {
-                                showToast(getString(Res.string.connection_offline))
-                            }
-                        }
-                    },
-                    onFavorite = { isFav, item ->
-                        coroutine.launch {
-                            viewModel.saveFavorite(isFav, item)
-                        }
-                    },
-                    onDetail = {
-                        onDetail(it?.id.toString())
-                    },
-                )
+            viewModel.setError(false)
+        }
+    }
+
+    CompositionLocalProvider(
+        LocalHomeEvent provides event.copy(
+            onSearch = {
+                viewModel.searchProduct(it)
+            },
+            onCategory = {
+                coroutine.launch {
+                    if (isOnline()) {
+                        viewModel.loadProduct(it)
+                    } else {
+                        showToast(getString(Res.string.connection_offline))
+                    }
+                }
+            },
+            onFavorite = { isFav, item ->
+                coroutine.launch {
+                    viewModel.saveFavorite(isFav, item)
+                }
+            },
+            onDetail = {
+                onDetail(it?.id.toString())
+            },
+        )
+    ) {
+        Surface(
+            modifier = modifier.padding(paddingValues),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            PullRefreshComponent(
+                onRefresh = {
+                    viewModel.loadProduct()
+                }
             ) {
                 Box {
                     HomeContent(
@@ -151,7 +153,6 @@ fun HomeScreen(
                         uiState = uiState
                     )
                 }
-
             }
         }
     }
@@ -192,12 +193,16 @@ fun OurProductsWithSearch(
     modifier: Modifier = Modifier
 ) {
     val event = LocalHomeEvent.current
+    val colorPrimary = MaterialTheme.colorScheme.primary
 
     Column(
         modifier = modifier
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Top
     ) {
+        val ourText = stringResource(Res.string.our)
+        val productsText = stringResource(Res.string.products)
+
         Text(
             buildAnnotatedString {
                 withStyle(style = ParagraphStyle(lineHeight = 30.sp)) {
@@ -206,15 +211,16 @@ fun OurProductsWithSearch(
                             fontSize = 24.sp
                         )
                     ) {
-                        append("Our\n")
+                        append(ourText)
                     }
                     withStyle(
                         style = SpanStyle(
                             fontWeight = FontWeight.Bold,
-                            fontSize = 24.sp
+                            fontSize = 24.sp,
+                            color = colorPrimary
                         )
                     ) {
-                        append("Products")
+                        append(productsText)
                     }
                 }
             }
@@ -241,7 +247,7 @@ fun OurProductsWithSearch(
                     .clickable { },
                 elevation = CardDefaults.cardElevation(6.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors =  CardDefaults.cardColors(Color.White)
+                colors = CardDefaults.cardColors(Color.White)
             ) {
                 IconButton(onClick = { }) {
                     Icon(
@@ -271,6 +277,12 @@ fun ProductCategory(
 
             if (index != 0) Spacer(Modifier.width(10.dp))
 
+            val selectedColor = if (index == isSelect) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.inverseOnSurface
+            }
+
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
@@ -280,8 +292,7 @@ fun ProductCategory(
                     }
                     .height(40.dp)
                     .border(
-                        color = if (index == isSelect) MaterialTheme.colorScheme.primary 
-                        else MaterialTheme.colorScheme.onSurface,
+                        color = selectedColor,
                         width = 2.dp,
                         shape = RoundedCornerShape(10.dp)
                     )
@@ -290,7 +301,7 @@ fun ProductCategory(
             ) {
                 Text(
                     text = item,
-                    color = if (index == isSelect) MaterialTheme.colorScheme.primary else Color.LightGray
+                    color = if (index == isSelect) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -314,7 +325,7 @@ fun ProductWidget(
     ) {
         items(uiState.product ?: emptyList()) { item ->
 
-            var isFavorite by remember { mutableStateOf(item.isFavorite ?: false) }
+            var isFavorite by remember { mutableStateOf(item.isFavorite) }
 
             Card(
                 modifier = Modifier
@@ -322,7 +333,7 @@ fun ProductWidget(
                     .wrapContentHeight(),
                 shape = RoundedCornerShape(24.dp),
                 elevation = CardDefaults.cardElevation(2.dp),
-                colors =  CardDefaults.cardColors(Color.White)
+                colors = CardDefaults.cardColors(Color.White)
             ) {
                 Column(
                     modifier = Modifier
@@ -337,10 +348,10 @@ fun ProductWidget(
                         event.onFavorite(isFavorite, item)
                     }) {
                         Icon(
-                            imageVector = if (isFavorite) FeatherIcons.Bookmark
-                            else FeatherIcons.Bookmark,
+                            imageVector = if (isFavorite) Icons.Default.Favorite
+                            else Icons.Default.Favorite,
                             contentDescription = "",
-                            tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                            tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -371,7 +382,7 @@ fun ProductWidget(
                     ) {
 
                         Text(
-                            text = item.title ?: "No Title",
+                            text = item.title,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             textAlign = TextAlign.Center,
@@ -380,7 +391,7 @@ fun ProductWidget(
                         )
 
                         Text(
-                            text = item.category ?: "No Category",
+                            text = item.category,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.primary,

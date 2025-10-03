@@ -23,6 +23,9 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Menu
+import ecommerce_kmp.composeapp.generated.resources.Res
+import ecommerce_kmp.composeapp.generated.resources.no_profile
+import org.jetbrains.compose.resources.painterResource
 import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
 import org.pascal.ecommerce.utils.getAsyncImageLoader
 
@@ -64,6 +67,8 @@ fun TopAppBarHeader(
                 model = user?.photoUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
+                error = painterResource(Res.drawable.no_profile),
+                placeholder = painterResource(Res.drawable.no_profile),
                 modifier = Modifier
                     .size(60.dp)
                     .background(MaterialTheme.colorScheme.background, CircleShape)

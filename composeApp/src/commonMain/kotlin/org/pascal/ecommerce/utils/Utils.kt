@@ -7,6 +7,8 @@ import coil3.memory.MemoryCache
 import coil3.request.CachePolicy
 import coil3.request.crossfade
 import coil3.util.DebugLogger
+import ecommerce_kmp.composeapp.generated.resources.Res
+import ecommerce_kmp.composeapp.generated.resources.no_profile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -63,12 +65,24 @@ fun getCurrentDate(): String {
     return kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString()
 }
 
-fun getAsyncImageLoader(context: PlatformContext) =
-    ImageLoader.Builder(context).memoryCachePolicy(CachePolicy.ENABLED).memoryCache {
-        MemoryCache.Builder().maxSizePercent(context, 0.3).strongReferencesEnabled(true).build()
-    }.diskCachePolicy(CachePolicy.ENABLED).networkCachePolicy(CachePolicy.ENABLED).diskCache {
-        newDiskCache()
-    }.crossfade(true).logger(DebugLogger()).build()
+fun getAsyncImageLoader(context: PlatformContext): ImageLoader {
+    return ImageLoader.Builder(context)
+        .memoryCachePolicy(CachePolicy.ENABLED)
+        .memoryCache {
+            MemoryCache.Builder()
+                .maxSizePercent(context, 0.3)
+                .strongReferencesEnabled(true)
+                .build()
+        }
+        .diskCachePolicy(CachePolicy.ENABLED)
+        .networkCachePolicy(CachePolicy.ENABLED)
+        .diskCache {
+            newDiskCache()
+        }
+        .crossfade(true)
+        .logger(DebugLogger())
+        .build()
+}
 
 fun newDiskCache(): DiskCache {
     return DiskCache.Builder().directory(FileSystem.SYSTEM_TEMPORARY_DIRECTORY / "image_cache")

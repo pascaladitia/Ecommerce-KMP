@@ -31,6 +31,9 @@ while Max Air cushioning adds comfort to the journey.
     <string name="login">Log In</string>
     <string name="google">Google</string>
     <string name="register">Register</string>
+    <string name="products">Products</string>
+    <string name="our">Our\n</string>
+    <string name="search">Search Product...</string>
 
     <string name="label_name">Name</string>
     <string name="label_email">Email</string>

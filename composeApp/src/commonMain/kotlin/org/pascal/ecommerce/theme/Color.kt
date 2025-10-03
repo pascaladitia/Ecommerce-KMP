@@ -3,7 +3,7 @@ package org.pascal.ecommerce.theme
 import androidx.compose.ui.graphics.Color
 
 // ==================== Light Colors ====================
-internal val PrimaryLight = Color(0xFFFF9800)
+internal val PrimaryLight = Color(0xFFFFCC80)
 internal val OnPrimaryLight = Color(0xFFFFFFFF)
 internal val PrimaryContainerLight = Color(0xFFFFE0B2)
 internal val OnPrimaryContainerLight = Color(0xFF4E342E)
@@ -49,7 +49,7 @@ internal val SurfaceContainerHighestLight = Color(0xFFE9E9E9)
 
 
 // ==================== Dark Colors ====================
-internal val PrimaryDark = Color(0xFFFFB74D)
+internal val PrimaryDark = Color(0xFFFFCC80)
 internal val OnPrimaryDark = Color(0xFF212121)
 internal val PrimaryContainerDark = Color(0xFFEF6C00)
 internal val OnPrimaryContainerDark = Color(0xFFFFFFFF)

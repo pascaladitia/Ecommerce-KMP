@@ -6,6 +6,7 @@ import co.touchlab.kermit.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
@@ -97,7 +98,7 @@ class HomeViewModel(
 
     fun searchProduct(name: String) {
         val result = _uiState.value.product?.filter { product ->
-            product.title?.contains(name, ignoreCase = true) ?: false
+            product.title.contains(name, ignoreCase = true)
         }
 
         _uiState.update {
@@ -118,7 +119,10 @@ class HomeViewModel(
     private suspend fun saveLocalProduct(product: List<Product>) {
         localUseCase.deleteProduct().collect()
         product.forEach {
-            localUseCase.insertProduct(it).collect()
+            localUseCase.insertProduct(it)
+                .catch { e ->
+                    Logger.e("Tag Insert Product", e)
+                }.collect()
         }
     }
 

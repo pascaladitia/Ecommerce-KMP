@@ -73,6 +73,7 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "room" }
 composeIcons-featherIcons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "composeIcons" }
 
+
 paging-common = { module = "app.cash.paging:paging-common", version.ref = "pagingCommon" }
 paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "pagingComposeCommon" }
 constraintlayout-compose-multiplatform = { module = "tech.annexflow.compose:constraintlayout-compose-multiplatform", version.ref = "constraintlayoutComposeMultiplatform" }
