@@ -58,6 +58,14 @@ import compose.icons.feathericons.ChevronLeft
 import ecommerce_kmp.composeapp.generated.resources.Res
 import ecommerce_kmp.composeapp.generated.resources.bgg_orange
 import ecommerce_kmp.composeapp.generated.resources.close
+import ecommerce_kmp.composeapp.generated.resources.hint_email
+import ecommerce_kmp.composeapp.generated.resources.hint_name
+import ecommerce_kmp.composeapp.generated.resources.hint_password
+import ecommerce_kmp.composeapp.generated.resources.label_email
+import ecommerce_kmp.composeapp.generated.resources.label_name
+import ecommerce_kmp.composeapp.generated.resources.label_password
+import ecommerce_kmp.composeapp.generated.resources.message_have_account
+import ecommerce_kmp.composeapp.generated.resources.register
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -72,6 +80,7 @@ import org.pascal.ecommerce.presentation.component.form.FormPasswordComponent
 import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
 import org.pascal.ecommerce.presentation.screen.register.state.LocalRegisterEvent
 import org.pascal.ecommerce.theme.AppTheme
+import org.pascal.ecommerce.utils.base.checkChannelValue
 import org.pascal.ecommerce.utils.getAppInfo
 
 @Composable
@@ -85,6 +94,8 @@ fun RegisterScreen(
     val event = LocalRegisterEvent.current
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val registerEvent = remember { viewModel.registerEvent }
+
     var isContentVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -104,8 +115,18 @@ fun RegisterScreen(
         }
     }
 
-    if (uiState.isRegister) {
-        onNavBack()
+    LaunchedEffect(Unit) {
+        registerEvent.checkChannelValue(
+            onSuccess = {
+                if (it) {
+                    coroutineScope.launch {
+                        isContentVisible = false
+                        delay(500)
+                        onNavBack()
+                    }
+                }
+            }
+        )
     }
 
     CompositionLocalProvider(
@@ -224,9 +245,9 @@ fun RegisterContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Register",
+                    text = stringResource(Res.string.register),
                     style = MaterialTheme.typography.headlineMedium.copy(
-                        color = MaterialTheme.colorScheme.background
+                        color = Color.White
                     )
                 )
             }
@@ -252,9 +273,9 @@ fun RegisterContent(
             ) {
                 FormBasicComponent(
                     title = buildAnnotatedString {
-                        append("Nama")
+                        append(stringResource(Res.string.label_name))
                     },
-                    hintText = "Masukan Nama",
+                    hintText = stringResource(Res.string.hint_name),
                     value = name,
                     onValueChange = {
                         name = it
@@ -266,8 +287,8 @@ fun RegisterContent(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 FormEmailComponent(
-                    title = "Email",
-                    hintText = "Masukan Email",
+                    title = stringResource(Res.string.label_email),
+                    hintText = stringResource(Res.string.hint_email),
                     value = email,
                     isShowTitle = true,
                     onValueChange = {
@@ -280,8 +301,8 @@ fun RegisterContent(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 FormPasswordComponent(
-                    title = "Password",
-                    hintText = "Masukan Password",
+                    title = stringResource(Res.string.label_password),
+                    hintText = stringResource(Res.string.hint_password),
                     value = password,
                     isShowTitle = true,
                     onValueChange = {
@@ -311,7 +332,7 @@ fun RegisterContent(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 ButtonComponent(
-                    text = "Register"
+                    text = stringResource(Res.string.register)
                 ) {
                     if (name.isBlank()) {
                         isNameError = true
@@ -336,7 +357,7 @@ fun RegisterContent(
                         .fillMaxWidth()
                         .clip(CircleShape)
                         .clickable { event.onNavBack() },
-                    text = "Sudah punya akun? Login disini!",
+                    text = stringResource(Res.string.message_have_account),
                     style = MaterialTheme.typography.labelMedium.copy(
                         color = MaterialTheme.colorScheme.primary
                     ),
@@ -363,7 +384,7 @@ fun RegisterContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Name",
+                    text = getAppInfo().appName,
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 12.sp
@@ -374,7 +395,7 @@ fun RegisterContent(
                 Text(
                     text = "APK Version ${getAppInfo().appName}",
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp
                     ),
                     textAlign = TextAlign.Center
