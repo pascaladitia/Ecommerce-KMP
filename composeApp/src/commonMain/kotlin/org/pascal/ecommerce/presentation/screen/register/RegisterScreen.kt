@@ -393,7 +393,7 @@ fun RegisterContent(
                 )
 
                 Text(
-                    text = "APK Version ${getAppInfo().appName}",
+                    text = "APK Version ${getAppInfo().versionName}",
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp

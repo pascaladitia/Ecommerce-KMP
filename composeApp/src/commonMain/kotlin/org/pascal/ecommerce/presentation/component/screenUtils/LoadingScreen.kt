@@ -24,7 +24,6 @@ import ecommerce_kmp.composeapp.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.pascal.ecommerce.theme.AppTheme
-import org.pascal.ecommerce.utils.getAsyncImageLoader
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {

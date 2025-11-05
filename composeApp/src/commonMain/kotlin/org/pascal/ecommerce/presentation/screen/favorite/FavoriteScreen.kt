@@ -39,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -50,8 +49,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Bookmark
 import kotlinx.coroutines.launch
@@ -60,11 +57,11 @@ import org.koin.compose.koinInject
 import org.pascal.ecommerce.data.local.entity.FavoriteEntity
 import org.pascal.ecommerce.data.preferences.PrefLogin
 import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
+import org.pascal.ecommerce.presentation.component.screenUtils.DynamicAsyncImage
 import org.pascal.ecommerce.presentation.component.screenUtils.TopAppBarHeader
 import org.pascal.ecommerce.presentation.screen.favorite.state.FavoriteUIState
 import org.pascal.ecommerce.presentation.screen.favorite.state.LocalFavoriteEvent
 import org.pascal.ecommerce.theme.AppTheme
-import org.pascal.ecommerce.utils.getAsyncImageLoader
 
 @Composable
 fun FavoriteScreen(
@@ -224,13 +221,9 @@ fun FavoriteItemList(
                             .background(MaterialTheme.colorScheme.primary),
                         contentAlignment = Alignment.Center
                     ) {
-                        AsyncImage(
-                            modifier = Modifier
-                                .size(100.dp),
-                            contentScale = ContentScale.FillBounds,
-                            contentDescription = "",
-                            imageLoader = getAsyncImageLoader(LocalPlatformContext.current),
-                            model = item.imageID
+                        DynamicAsyncImage(
+                            modifier = Modifier.size(100.dp),
+                            imageUrl = item.imageID.orEmpty()
                         )
                     }
 

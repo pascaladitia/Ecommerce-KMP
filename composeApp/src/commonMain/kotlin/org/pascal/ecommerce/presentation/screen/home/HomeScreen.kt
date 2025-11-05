@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -46,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -57,8 +57,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
 import ecommerce_kmp.composeapp.generated.resources.Res
 import ecommerce_kmp.composeapp.generated.resources.close
 import ecommerce_kmp.composeapp.generated.resources.connection_offline
@@ -75,13 +73,13 @@ import org.pascal.ecommerce.data.preferences.PrefLogin
 import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
 import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
 import org.pascal.ecommerce.presentation.component.form.Search
+import org.pascal.ecommerce.presentation.component.screenUtils.DynamicAsyncImage
 import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
 import org.pascal.ecommerce.presentation.component.screenUtils.PullRefreshComponent
 import org.pascal.ecommerce.presentation.component.screenUtils.TopAppBarHeader
 import org.pascal.ecommerce.presentation.screen.home.state.HomeUIState
 import org.pascal.ecommerce.presentation.screen.home.state.LocalHomeEvent
 import org.pascal.ecommerce.theme.AppTheme
-import org.pascal.ecommerce.utils.getAsyncImageLoader
 import org.pascal.ecommerce.utils.isOnline
 import org.pascal.ecommerce.utils.showToast
 
@@ -349,7 +347,7 @@ fun ProductWidget(
                     }) {
                         Icon(
                             imageVector = if (isFavorite) Icons.Default.Favorite
-                            else Icons.Default.Favorite,
+                            else Icons.Outlined.FavoriteBorder,
                             contentDescription = "",
                             tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -363,13 +361,9 @@ fun ProductWidget(
                             .background(MaterialTheme.colorScheme.primary),
                         contentAlignment = Alignment.Center
                     ) {
-                        AsyncImage(
-                            modifier = Modifier
-                                .size(100.dp),
-                            contentScale = ContentScale.Fit,
-                            contentDescription = "",
-                            imageLoader = getAsyncImageLoader(LocalPlatformContext.current),
-                            model = item.thumbnail
+                        DynamicAsyncImage(
+                            modifier = Modifier.size(100.dp),
+                            imageUrl = item.thumbnail
                         )
                     }
 

@@ -42,7 +42,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -51,8 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ShoppingCart
 import ecommerce_kmp.composeapp.generated.resources.Res
@@ -63,13 +60,14 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.pascal.ecommerce.domain.model.Product
 import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
+import org.pascal.ecommerce.presentation.component.screenUtils.DynamicAsyncImage
 import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
 import org.pascal.ecommerce.presentation.component.screenUtils.RatingBar
 import org.pascal.ecommerce.presentation.component.screenUtils.TopAppBarWithBack
 import org.pascal.ecommerce.presentation.screen.detail.state.DetailUIState
 import org.pascal.ecommerce.presentation.screen.detail.state.LocalDetailEvent
 import org.pascal.ecommerce.theme.AppTheme
-import org.pascal.ecommerce.utils.getAsyncImageLoader
+import org.pascal.ecommerce.utils.base.checkChannelValue
 
 @Composable
 fun DetailScreen(
@@ -81,14 +79,16 @@ fun DetailScreen(
 ) {
     val coroutine = rememberCoroutineScope()
     val event = LocalDetailEvent.current
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val nextEvent = remember { viewModel.nextEvent }
 
     LaunchedEffect(Unit) {
         viewModel.loadProductsDetail(productId)
     }
 
-    LaunchedEffect(uiState.isSuccess) {
-        if (uiState.isSuccess) onNavBack()
+    LaunchedEffect(Unit) {
+        nextEvent.checkChannelValue(onSuccess = { onNavBack() })
     }
 
     if (uiState.isLoading) LoadingScreen()
@@ -218,11 +218,11 @@ fun DetailContent(
 
                             Spacer(modifier = Modifier.padding(10.dp))
 
-                            ProductAvailableSize(product = uiState.product)
+                            ProductItemColorWithDesc(product = uiState.product)
 
                             Spacer(modifier = Modifier.padding(10.dp))
 
-                            ProductItemColorWithDesc(product = uiState.product)
+                            ProductAvailableSize(product = uiState.product)
 
                             Spacer(modifier = Modifier.padding(10.dp))
 
@@ -258,13 +258,9 @@ fun HeaderImagesSlider(
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        AsyncImage(
-            imageLoader = getAsyncImageLoader(LocalPlatformContext.current),
-            model = showImage,
-            contentScale = ContentScale.Fit,
-            contentDescription = "",
-            modifier = Modifier
-                .size(230.dp)
+        DynamicAsyncImage(
+            modifier = Modifier.size(230.dp),
+            imageUrl = showImage.orEmpty()
         )
 
         LazyRow(
@@ -289,13 +285,11 @@ fun HeaderImagesSlider(
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    AsyncImage(
-                        imageLoader = getAsyncImageLoader(LocalPlatformContext.current),
-                        model = item,
-                        contentDescription = "",
+                    DynamicAsyncImage(
                         modifier = Modifier
-                            .size(50.dp, 50.dp)
-                            .padding(6.dp)
+                            .size(50.dp)
+                            .padding(6.dp),
+                        imageUrl = item
                     )
 
                 }
@@ -389,22 +383,17 @@ fun ProductAvailableSize(
                         .height(40.dp)
                         .width(70.dp)
                         .border(
-                            color = MaterialTheme.colorScheme.surface,
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
                             width = 2.dp,
                             shape = RoundedCornerShape(10.dp)
                         )
                         .clickable { }) {
                     Text(
                         modifier = Modifier
-                            .padding(
-                                start = 20.dp,
-                                end = 16.dp,
-                                top = 10.dp,
-                                bottom = 8.dp
-                            ),
+                            .padding(18.dp),
                         text = item,
                         fontWeight = FontWeight.Bold,
-                        color = Color.LightGray
+                        color = MaterialTheme.colorScheme.inverseOnSurface
                     )
 
 
@@ -428,7 +417,7 @@ fun ProductItemColorWithDesc(
         Spacer(modifier = Modifier.padding(5.dp))
         Text(
             text = product?.description ?: "",
-            color = MaterialTheme.colorScheme.tertiary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 14.sp
         )
     }

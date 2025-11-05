@@ -27,7 +27,6 @@ import ecommerce_kmp.composeapp.generated.resources.Res
 import ecommerce_kmp.composeapp.generated.resources.no_profile
 import org.jetbrains.compose.resources.painterResource
 import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
-import org.pascal.ecommerce.utils.getAsyncImageLoader
 
 @Composable
 fun TopAppBarHeader(

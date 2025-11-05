@@ -45,8 +45,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Delete
 import ecommerce_kmp.composeapp.generated.resources.Res
@@ -57,12 +55,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.pascal.ecommerce.data.local.entity.CartEntity
 import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
+import org.pascal.ecommerce.presentation.component.screenUtils.DynamicAsyncImage
 import org.pascal.ecommerce.presentation.component.screenUtils.TopAppBarHeader
 import org.pascal.ecommerce.presentation.screen.cart.component.CartPayment
 import org.pascal.ecommerce.presentation.screen.cart.state.LocalCartEvent
 import org.pascal.ecommerce.theme.AppTheme
 import org.pascal.ecommerce.utils.calculateTotalPrice
-import org.pascal.ecommerce.utils.getAsyncImageLoader
 import org.pascal.ecommerce.utils.isOnline
 import org.pascal.ecommerce.utils.showToast
 
@@ -248,11 +246,9 @@ fun ProductCartItems(
                 .background(backgroundColor),
             contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
-                imageLoader = getAsyncImageLoader(LocalPlatformContext.current),
-                model = imagePainter,
-                contentDescription = "",
+            DynamicAsyncImage(
                 modifier = Modifier.padding(8.dp),
+                imageUrl = imagePainter
             )
         }
         Column(

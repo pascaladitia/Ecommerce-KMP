@@ -2,6 +2,7 @@ package org.pascal.ecommerce.presentation.screen.detail
 
 import androidx.lifecycle.ViewModel
 import co.touchlab.kermit.Logger
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -14,6 +15,8 @@ import org.pascal.ecommerce.domain.model.Product
 import org.pascal.ecommerce.domain.usecase.local.LocalUseCaseImpl
 import org.pascal.ecommerce.domain.usecase.product.ProductUseCaseImpl
 import org.pascal.ecommerce.presentation.screen.detail.state.DetailUIState
+import org.pascal.ecommerce.utils.base.EventAction
+import org.pascal.ecommerce.utils.base.sendSuccess
 import org.pascal.ecommerce.utils.isOnline
 import org.pascal.ecommerce.utils.showToast
 
@@ -24,6 +27,9 @@ class DetailViewModel(
 
     private val _uiState = MutableStateFlow(DetailUIState())
     val uiState get() = _uiState.asStateFlow()
+
+    private val _nextEvent = Channel<EventAction<Boolean>>()
+    val nextEvent = _nextEvent
 
     suspend fun loadProductsDetail(id: String?) {
         _uiState.update { it.copy(isLoading = true, product = null) }
@@ -106,12 +112,8 @@ class DetailViewModel(
             .collect {
                 showToast("Success Add to Cart")
 
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        isSuccess = true
-                    )
-                }
+                _uiState.update { it.copy(isLoading = false) }
+                _nextEvent.sendSuccess(true)
             }
     }
 
@@ -152,10 +154,5 @@ class DetailViewModel(
 
     fun setError(bool: Boolean) {
         _uiState.update { it.copy(isError = bool) }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        _uiState.update { it.copy(isSuccess = false) }
     }
 }

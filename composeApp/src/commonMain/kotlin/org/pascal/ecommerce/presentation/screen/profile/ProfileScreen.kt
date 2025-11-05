@@ -43,8 +43,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.CheckCircle
 import compose.icons.feathericons.X
@@ -60,11 +58,11 @@ import org.pascal.ecommerce.data.remote.dtos.user.UserInfo
 import org.pascal.ecommerce.domain.model.TransactionModel
 import org.pascal.ecommerce.presentation.component.button.ButtonComponent
 import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
+import org.pascal.ecommerce.presentation.component.screenUtils.DynamicAsyncImage
 import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
 import org.pascal.ecommerce.presentation.screen.profile.state.LocalProfileEvent
 import org.pascal.ecommerce.presentation.screen.profile.state.ProfileUIState
 import org.pascal.ecommerce.theme.AppTheme
-import org.pascal.ecommerce.utils.getAsyncImageLoader
 
 @Composable
 fun ProfileScreen(
@@ -140,13 +138,11 @@ fun ProfileContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box {
-                    AsyncImage(
+                    DynamicAsyncImage(
                         modifier = Modifier
                             .clip(CircleShape)
                             .size(60.dp),
-                        contentDescription = null,
-                        imageLoader = getAsyncImageLoader(LocalPlatformContext.current),
-                        model = pref?.photoUrl
+                        imageUrl = pref?.photoUrl.orEmpty()
                     )
 
                     if (uiState.isVerified) {
@@ -319,11 +315,9 @@ fun TransactionItems(
                     .background(backgroundColor),
                 contentAlignment = Alignment.Center
             ) {
-                AsyncImage(
-                    model = product.imageID,
-                    imageLoader = getAsyncImageLoader(LocalPlatformContext.current),
-                    contentDescription = "",
+                DynamicAsyncImage(
                     modifier = Modifier.padding(8.dp),
+                    imageUrl = product.imageID.orEmpty()
                 )
             }
             Column(

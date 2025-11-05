@@ -1,21 +1,11 @@
 package org.pascal.ecommerce.utils
 
-import coil3.ImageLoader
-import coil3.PlatformContext
-import coil3.disk.DiskCache
-import coil3.memory.MemoryCache
-import coil3.request.CachePolicy
-import coil3.request.crossfade
-import coil3.util.DebugLogger
-import ecommerce_kmp.composeapp.generated.resources.Res
-import ecommerce_kmp.composeapp.generated.resources.no_profile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toLocalDateTime
-import okio.FileSystem
 import org.pascal.ecommerce.data.local.entity.CartEntity
 import org.pascal.ecommerce.domain.model.AppInfo
 import org.pascal.ecommerce.utils.Constant.FORMAT_DATE
@@ -63,31 +53,6 @@ private fun formatTwoDecimals(value: Double): String {
 @OptIn(ExperimentalTime::class)
 fun getCurrentDate(): String {
     return kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString()
-}
-
-fun getAsyncImageLoader(context: PlatformContext): ImageLoader {
-    return ImageLoader.Builder(context)
-        .memoryCachePolicy(CachePolicy.ENABLED)
-        .memoryCache {
-            MemoryCache.Builder()
-                .maxSizePercent(context, 0.3)
-                .strongReferencesEnabled(true)
-                .build()
-        }
-        .diskCachePolicy(CachePolicy.ENABLED)
-        .networkCachePolicy(CachePolicy.ENABLED)
-        .diskCache {
-            newDiskCache()
-        }
-        .crossfade(true)
-        .logger(DebugLogger())
-        .build()
-}
-
-fun newDiskCache(): DiskCache {
-    return DiskCache.Builder().directory(FileSystem.SYSTEM_TEMPORARY_DIRECTORY / "image_cache")
-        .maxSizeBytes(1024L * 1024 * 1024)
-        .build()
 }
 
 expect fun getFileNameFromUri(uri: ByteArray?): String
