@@ -110,7 +110,7 @@ fun FormBasicComponent(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState()
-    val border = if (isFocused.value) MaterialTheme.colorScheme.primary else Gray
+    val border = if (isFocused.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
 
     Column {
         Text(
@@ -217,7 +217,7 @@ fun FormClickedComponent(
                         Text(
                             text = hintText,
                             style = MaterialTheme.typography.bodySmall.copy(
-                                color = MaterialTheme.colorScheme.onSurface
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         )
                     }
@@ -262,7 +262,7 @@ fun FormEmailComponent(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState()
-    val border = if (isFocused.value) MaterialTheme.colorScheme.primary else LightGray
+    val border = if (isFocused.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
 
     Column {
         if (isShowTitle) {
@@ -288,7 +288,7 @@ fun FormEmailComponent(
             },
             interactionSource = interactionSource,
             textStyle = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.onSurface
             ),
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -306,7 +306,7 @@ fun FormEmailComponent(
                         Text(
                             text = hintText,
                             style = MaterialTheme.typography.bodySmall.copy(
-                                color = MaterialTheme.colorScheme.onSurface
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         )
                     }
@@ -337,7 +337,7 @@ fun FormPasswordComponent(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState()
-    val border = if (isFocused.value) MaterialTheme.colorScheme.primary else LightGray
+    val border = if (isFocused.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
 
     Column {
         if (isShowTitle) {
@@ -353,7 +353,7 @@ fun FormPasswordComponent(
                     Text(
                         text = "*",
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = Red
+                            color = MaterialTheme.colorScheme.error
                         )
                     )
                 }
@@ -376,7 +376,7 @@ fun FormPasswordComponent(
             },
             interactionSource = interactionSource,
             textStyle = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.onSurface
             ),
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -405,7 +405,7 @@ fun FormPasswordComponent(
                                 Text(
                                     text = hintText,
                                     style = MaterialTheme.typography.bodySmall.copy(
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 )
                             }
@@ -442,7 +442,7 @@ fun TextError(text: String) {
         Text(
             text = "$text tidak boleh kosong.",
             style = MaterialTheme.typography.labelSmall.copy(
-                color = Red
+                color = MaterialTheme.colorScheme.error
             ),
         )
     }
@@ -456,7 +456,7 @@ fun TextError2(text: AnnotatedString) {
         Text(
             text = "$text tidak boleh kosong.",
             style = MaterialTheme.typography.labelSmall.copy(
-                color = Red
+                color = MaterialTheme.colorScheme.error
             ),
         )
     }

@@ -32,6 +32,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Search
+import ecommerce_kmp.composeapp.generated.resources.Res
+import ecommerce_kmp.composeapp.generated.resources.search
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun Search(
@@ -40,7 +44,7 @@ fun Search(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState()
-    val border = if (isFocused.value) MaterialTheme.colorScheme.primary else LightGray
+    val border = if (isFocused.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
 
     var searchText by remember { mutableStateOf("") }
 
@@ -53,7 +57,7 @@ fun Search(
         onValueChange = {
             searchText = it
         },
-        textStyle = MaterialTheme.typography.bodySmall,
+        textStyle = MaterialTheme.typography.bodyMedium,
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = ImeAction.Search,
@@ -76,9 +80,9 @@ fun Search(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.size(24.dp),
                         imageVector = FeatherIcons.Search,
-                        contentDescription = "Search",
+                        contentDescription = "",
                         tint = MaterialTheme.colorScheme.onSurface
                     )
 
@@ -87,9 +91,9 @@ fun Search(
                     Box {
                         if (searchText.isEmpty()) {
                             Text(
-                                text = "Cari Tugas Disini",
-                                style = MaterialTheme.typography.bodySmall.copy(
-                                    color = MaterialTheme.colorScheme.onSurface
+                                text = stringResource(Res.string.search),
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             )
                         }
@@ -99,4 +103,11 @@ fun Search(
             }
         }
     )
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun Preview() {
+    Search() {}
 }

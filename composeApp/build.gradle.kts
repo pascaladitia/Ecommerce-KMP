@@ -1,5 +1,7 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec
 import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
@@ -11,23 +13,42 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.buildKonfig)
+    alias(libs.plugins.google.service)
+    alias(libs.plugins.kotlinCocoapods)
 }
 
 kotlin {
     androidTarget {
-        //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
-        instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
         }
+    }
+
+    cocoapods {
+        name = "ComposeApp"
+        version = "0.1.0"
+        summary = "Ecommerce KMP app"
+        homepage = "https://github.com/JetBrains/kotlin"
+        podfile = project.file("../iosApp/Podfile")
+        ios.deploymentTarget = "16.0"
+
+        framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+
+        pod("FirebaseCore")
     }
 
     sourceSets {
@@ -38,6 +59,8 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(compose.materialIconsExtended)
+
             implementation(libs.kermit)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.client.core)
@@ -67,6 +90,10 @@ kotlin {
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
             implementation(libs.sqlite.bundled)
+            implementation(libs.compose.webview.multiplatform)
+            implementation(libs.firebase.auth)
+            implementation(libs.firebase.app)
+            implementation(libs.firebase.firestore)
         }
 
         commonTest.dependencies {
@@ -81,11 +108,13 @@ kotlin {
             implementation(libs.androidx.activityCompose)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
-
+            implementation(libs.itext7.core)
 
             implementation(libs.koin.android)
             implementation(libs.androidx.preference.ktx)
             implementation(libs.room.runtime.android)
+            implementation(libs.play.services.auth)
+            implementation(project.dependencies.platform(libs.firebase.bom))
         }
 
         iosMain.dependencies {
@@ -103,7 +132,7 @@ android {
         minSdk = 24
         targetSdk = 36
 
-        applicationId = "org.pascal.ecommerce.androidApp"
+        applicationId = "org.pascal.ecommerce"
         versionCode = 1
         versionName = "1.0.0"
 
@@ -120,7 +149,7 @@ dependencies {
 buildkonfig {
     packageName = "org.pascal.ecommerce"
     defaultConfigs {
-        buildConfigField(FieldSpec.Type.STRING, "BASE_URL", "https://test")
+        buildConfigField(FieldSpec.Type.STRING, "BASE_URL", "https://dummyjson.com")
     }
 }
 
@@ -131,7 +160,6 @@ room {
 dependencies {
     with(libs.room.compiler) {
         add("kspAndroid", this)
-        add("kspIosX64", this)
         add("kspIosArm64", this)
         add("kspIosSimulatorArm64", this)
     }

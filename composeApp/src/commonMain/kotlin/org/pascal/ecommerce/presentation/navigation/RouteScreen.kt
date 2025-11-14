@@ -8,9 +8,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import org.pascal.ecommerce.presentation.screen.login.LoginScreen
-import org.pascal.ecommerce.presentation.screen.splash.SplashScreen
 import org.pascal.ecommerce.data.preferences.PrefLogin
+import org.pascal.ecommerce.presentation.screen.cart.CartScreen
+import org.pascal.ecommerce.presentation.screen.detail.DetailScreen
+import org.pascal.ecommerce.presentation.screen.favorite.FavoriteScreen
+import org.pascal.ecommerce.presentation.screen.home.HomeScreen
+import org.pascal.ecommerce.presentation.screen.login.LoginScreen
+import org.pascal.ecommerce.presentation.screen.profile.ProfileScreen
+import org.pascal.ecommerce.presentation.screen.register.RegisterScreen
+import org.pascal.ecommerce.presentation.screen.report.ReportScreen
+import org.pascal.ecommerce.presentation.screen.splash.SplashScreen
+import org.pascal.ecommerce.utils.base.getFromPreviousBackStack
+import org.pascal.ecommerce.utils.base.saveToCurrentBackStack
 
 @Composable
 fun RouteScreen(
@@ -23,8 +32,8 @@ fun RouteScreen(
         bottomBar = {
             if (currentRoute in listOf(
                     Screen.HomeScreen.route,
-                    Screen.GuideScreen.route,
-                    Screen.HistoryScreen.route,
+                    Screen.FavoriteScreen.route,
+                    Screen.CartScreen.route,
                     Screen.ProfileScreen.route
                 )
             ) {
@@ -54,7 +63,6 @@ fun RouteScreen(
             }
             composable(route = Screen.LoginScreen.route) {
                 LoginScreen(
-                    paddingValues = paddingValues,
                     onLogin = {
                         navController.navigate(Screen.HomeScreen.route) {
                             popUpTo(Screen.LoginScreen.route) {
@@ -62,8 +70,90 @@ fun RouteScreen(
                             }
                             launchSingleTop = true
                         }
+                    },
+                    onRegister = {
+                        navController.navigate(Screen.RegisterScreen.route)
                     }
                 )
+            }
+            composable(route = Screen.RegisterScreen.route) {
+                RegisterScreen(
+                    paddingValues = paddingValues,
+                    onNavBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable(route = Screen.HomeScreen.route) {
+                HomeScreen(
+                    paddingValues = paddingValues,
+                    onDetail = {
+                        saveToCurrentBackStack(navController, "id", it)
+                        navController.navigate(Screen.DetailScreen.route)
+                    }
+                )
+            }
+            composable(route = Screen.CartScreen.route) {
+                CartScreen(
+                    paddingValues = paddingValues,
+                    onFinish = {
+                        saveToCurrentBackStack(navController, "cart", it)
+                        navController.navigate(Screen.ReportScreen.route)
+                    }
+                )
+            }
+            composable(route = Screen.FavoriteScreen.route) {
+                FavoriteScreen (
+                    paddingValues = paddingValues,
+                    onDetail = {
+                        saveToCurrentBackStack(navController, "id", it?.id.toString())
+                        navController.navigate(Screen.DetailScreen.route)
+                    }
+                )
+            }
+            composable(route = Screen.ProfileScreen.route) {
+                ProfileScreen(
+                    paddingValues = paddingValues,
+                    onVerified = {
+                        navController.navigate(Screen.VerifiedScreen.route)
+                    },
+                    onLogout = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.LoginScreen.route) {
+                            popUpTo(Screen.HomeScreen.route) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
+            composable(route = Screen.DetailScreen.route) {
+                DetailScreen(
+                    paddingValues = paddingValues,
+                    productId = getFromPreviousBackStack(navController, "id"),
+                    onNavBack = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+            composable(route = Screen.ReportScreen.route) {
+                ReportScreen(
+                    paddingValues = paddingValues,
+                    product = getFromPreviousBackStack(navController, "cart"),
+                    onNavBack = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.HomeScreen.route)
+                    }
+                )
+            }
+            composable(route = Screen.VerifiedScreen.route) {
+//                VerifiedScreen(
+//                    onNavBack = {
+//                        navController.popBackStack()
+//                        navController.navigate(Screen.ProfileScreen.route)
+//                    }
+//                )
             }
         }
     }

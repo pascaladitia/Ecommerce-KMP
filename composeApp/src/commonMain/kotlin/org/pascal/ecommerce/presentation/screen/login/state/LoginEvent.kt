@@ -7,5 +7,7 @@ val LocalLoginEvent = compositionLocalOf { LoginEvent() }
 
 @Stable
 data class LoginEvent(
-    val onLogin: (String, String) -> Unit = { _, _ -> }
+    val onLogin: (String, String) -> Unit = { _, _ -> },
+    val onRegister: () -> Unit = {},
+    val onGoogle: () -> Unit = {}
 )

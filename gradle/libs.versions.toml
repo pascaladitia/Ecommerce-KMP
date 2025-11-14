@@ -1,5 +1,6 @@
 [versions]
 
+itext7Core = "8.0.3"
 kotlin = "2.2.20"
 compose = "1.9.0-rc01"
 agp = "8.10.0"
@@ -28,12 +29,18 @@ moko-permission = "0.20.1"
 preferenceKtx = "1.2.1"
 peekaboo = "0.5.2"
 sqlite = "2.6.0"
+composeWebviewMultiplatform = "2.0.3"
+firebaseApp = "2.3.0"
+playServicesAuth = "21.4.0"
+googleServices = "4.4.3"
+firebase-bom = "33.5.1"
 
 [libraries]
 
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-uitest-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-uitest-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }
+itext7-core = { module = "com.itextpdf:itext7-core", version.ref = "itext7Core" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
@@ -66,6 +73,7 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "room" }
 composeIcons-featherIcons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "composeIcons" }
 
+
 paging-common = { module = "app.cash.paging:paging-common", version.ref = "pagingCommon" }
 paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "pagingComposeCommon" }
 constraintlayout-compose-multiplatform = { module = "tech.annexflow.compose:constraintlayout-compose-multiplatform", version.ref = "constraintlayoutComposeMultiplatform" }
@@ -75,6 +83,12 @@ peekaboo-image-picker = { module = "io.github.onseok:peekaboo-image-picker", ver
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 moko-permission = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko-permission" }
 moko-permission-camera = { module = "dev.icerock.moko:permissions-camera", version.ref = "moko-permission" }
+compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
+firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "firebaseApp" }
+firebase-app = { module = "dev.gitlive:firebase-app", version.ref = "firebaseApp" }
+firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "firebaseApp" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 
 [plugins]
 
@@ -86,3 +100,5 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 buildKonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }
+google-service = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+kotlinCocoapods     = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }

@@ -10,10 +10,10 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -31,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionsController
 import dev.icerock.moko.permissions.camera.CAMERA
@@ -56,39 +57,48 @@ import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import ecommerce_kmp.composeapp.generated.resources.Res
+import ecommerce_kmp.composeapp.generated.resources.app_name
+import ecommerce_kmp.composeapp.generated.resources.bgg_orange
 import ecommerce_kmp.composeapp.generated.resources.close
-import ecommerce_kmp.composeapp.generated.resources.cyclone
-import ecommerce_kmp.composeapp.generated.resources.ic_logo
+import ecommerce_kmp.composeapp.generated.resources.google
+import ecommerce_kmp.composeapp.generated.resources.google_logo
+import ecommerce_kmp.composeapp.generated.resources.hint_email
+import ecommerce_kmp.composeapp.generated.resources.hint_password
+import ecommerce_kmp.composeapp.generated.resources.label_email
+import ecommerce_kmp.composeapp.generated.resources.label_password
+import ecommerce_kmp.composeapp.generated.resources.login
+import ecommerce_kmp.composeapp.generated.resources.logo
+import ecommerce_kmp.composeapp.generated.resources.message_dont_have_account
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.pascal.ecommerce.PlatformColors
 import org.pascal.ecommerce.presentation.component.button.ButtonComponent
-import org.pascal.ecommerce.presentation.component.dialog.DIALOG_DISSMISS
-import org.pascal.ecommerce.presentation.component.dialog.DIALOG_ERROR
 import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
 import org.pascal.ecommerce.presentation.component.form.FormEmailComponent
 import org.pascal.ecommerce.presentation.component.form.FormPasswordComponent
+import org.pascal.ecommerce.presentation.component.screenUtils.CardComponent
 import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
 import org.pascal.ecommerce.presentation.screen.login.state.LocalLoginEvent
+import org.pascal.ecommerce.theme.AppTheme
 import org.pascal.ecommerce.utils.base.checkChannelValue
+import org.pascal.ecommerce.utils.getAppInfo
 
 @Composable
 fun LoginScreen(
-    paddingValues: PaddingValues,
     viewModel: LoginViewModel = koinInject<LoginViewModel>(),
-    onLogin: () -> Unit
+    onLogin: () -> Unit,
+    onRegister: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val event = LocalLoginEvent.current
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val loginEvent = remember { viewModel.loginEvent }
 
-    var showLoading by remember { mutableStateOf(false) }
-    var isDialogVisible by remember { mutableIntStateOf(0) }
-    var errorMessage by remember { mutableStateOf("") }
     var isContentVisible by remember { mutableStateOf(false) }
 
     val factory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
@@ -104,24 +114,21 @@ fun LoginScreen(
         controller.providePermission(Permission.CAMERA)
     }
 
-    when (isDialogVisible) {
-        DIALOG_ERROR -> {
-            ShowDialog(
-                message = errorMessage,
-                textButton = stringResource(Res.string.close),
-                color = MaterialTheme.colorScheme.primary
-            ) {
-                isDialogVisible = DIALOG_DISSMISS
-            }
+    if (uiState.isLoading) LoadingScreen()
+
+    if (uiState.isError.first) {
+        ShowDialog(
+            message = uiState.isError.second,
+            textButton = stringResource(Res.string.close),
+            color = MaterialTheme.colorScheme.primary
+        ) {
+            viewModel.setError(false)
         }
     }
 
     LaunchedEffect(Unit) {
         loginEvent.checkChannelValue(
-            onLoading = { showLoading = true },
             onSuccess = {
-                showLoading = false
-
                 if (it) {
                     coroutineScope.launch {
                         isContentVisible = false
@@ -129,26 +136,23 @@ fun LoginScreen(
                         onLogin()
                     }
                 }
-            },
-            onFailure = { _, msg ->
-                showLoading = false
-                errorMessage = msg
-                isDialogVisible = DIALOG_ERROR
             }
         )
-    }
-
-    if (showLoading) {
-        LoadingScreen()
     }
 
     CompositionLocalProvider(
         LocalLoginEvent provides event.copy(
             onLogin = { user, password ->
                 coroutineScope.launch {
-                    viewModel.exeLogin(user, password)
+                    viewModel.loginEmail(user, password)
                 }
             },
+            onGoogle = {
+                coroutineScope.launch {
+                    viewModel.loginGoogle()
+                }
+            },
+            onRegister = onRegister
         )
     ) {
         LoginContent(isContentVisible = isContentVisible)
@@ -185,14 +189,14 @@ fun LoginContent(
 
         Box(
             modifier = Modifier
-                .height(400.dp)
+                .height(380.dp)
                 .constrainAs(imageBackground) {
                     top.linkTo(parent.top)
 
                 }
         ) {
             Image(
-                painter = painterResource(Res.drawable.ic_logo),
+                painter = painterResource(Res.drawable.bgg_orange),
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
@@ -217,18 +221,21 @@ fun LoginContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(Res.drawable.ic_logo),
+                    painter = painterResource(Res.drawable.logo),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(40.dp)
+                        .background(Color.White, RoundedCornerShape(16.dp))
+                        .padding(4.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .size(36.dp)
                 )
 
                 Spacer(Modifier.width(8.dp))
 
                 Text(
-                    text = "KMP Project",
+                    text = stringResource(Res.string.app_name),
                     style = MaterialTheme.typography.headlineMedium.copy(
-                        color = MaterialTheme.colorScheme.background
+                        color = Color.White
                     )
                 )
             }
@@ -243,18 +250,15 @@ fun LoginContent(
             enter = fadeIn(tween(durationMillis = 500)) + slideInHorizontally(),
             exit = fadeOut(tween(durationMillis = 500)) + slideOutHorizontally()
         ) {
-            Column(
+            CardComponent(
                 modifier = Modifier
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 16.dp)
                     .shadow(50.dp, RoundedCornerShape(16.dp))
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White, RoundedCornerShape(16.dp))
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp)
             ) {
                 FormEmailComponent(
-                    title = "Email / No. Telepon",
-                    hintText = "Masukan Email atau No. Telepon",
+                    title = stringResource(Res.string.label_email),
+                    hintText = stringResource(Res.string.hint_email),
                     value = user,
                     isShowTitle = true,
                     onValueChange = {
@@ -264,11 +268,11 @@ fun LoginContent(
                     isError = isUserError
                 )
 
-                Spacer(modifier = Modifier.height(17.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 FormPasswordComponent(
-                    title = "Password",
-                    hintText = "Masukan Password",
+                    title = stringResource(Res.string.label_password),
+                    hintText = stringResource(Res.string.hint_password),
                     value = password,
                     isShowTitle = true,
                     onValueChange = {
@@ -292,10 +296,10 @@ fun LoginContent(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(17.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 ButtonComponent(
-                    text = "Log In"
+                    text = stringResource(Res.string.login)
                 ) {
                     if (user.isBlank()) {
                         isUserError = true
@@ -310,7 +314,30 @@ fun LoginContent(
                     }
                 }
 
+                Spacer(modifier = Modifier.height(16.dp))
 
+                ButtonComponent(
+                    text = stringResource(Res.string.google),
+                    isIcon = 1,
+                    icon = Res.drawable.google_logo,
+                    color = MaterialTheme.colorScheme.error
+                ) {
+                    event.onGoogle()
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(CircleShape)
+                        .clickable { event.onRegister() },
+                    text = stringResource(Res.string.message_dont_have_account),
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
+                    textAlign = TextAlign.Center
+                )
             }
         }
 
@@ -332,7 +359,7 @@ fun LoginContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "KMP Project",
+                    text = getAppInfo().appName,
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 12.sp
@@ -341,14 +368,22 @@ fun LoginContent(
                 )
 
                 Text(
-                    text = "APK Version 1.0.0",
+                    text = "APK Version ${getAppInfo().versionName}",
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp
                     ),
                     textAlign = TextAlign.Center
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoginPreview() {
+    AppTheme {
+        LoginContent()
     }
 }

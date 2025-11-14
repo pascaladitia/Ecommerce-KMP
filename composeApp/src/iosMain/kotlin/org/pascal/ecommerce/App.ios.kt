@@ -5,35 +5,49 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.room.Room
-import org.pascal.ecommerce.data.local.AppDatabase
+import androidx.room.RoomDatabase
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.Settings
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.FirebaseAuth
+import dev.gitlive.firebase.auth.auth
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
+import org.pascal.ecommerce.data.local.database.AppDatabase
 import platform.CoreGraphics.CGRectMake
-import platform.Foundation.NSHomeDirectory
+import platform.Foundation.NSDocumentDirectory
+import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDefaults
+import platform.Foundation.NSUserDomainMask
 import platform.UIKit.UIApplication
 import platform.UIKit.UIColor
 import platform.UIKit.UINavigationBar
 import platform.UIKit.UIScreen
 import platform.UIKit.UIView
+import platform.UIKit.UIViewController
 import platform.UIKit.UIWindow
 
 actual fun createSettings(): Settings {
     return NSUserDefaultsSettings(NSUserDefaults.standardUserDefaults)
 }
 
-actual fun getDatabaseBuilder(): AppDatabase {
-    val dbFile = "${NSHomeDirectory()}/app.db"
+actual fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
+    val dbFilePath = documentDirectory() + "/app.db"
     return Room.databaseBuilder<AppDatabase>(
-        name = dbFile,
-        factory = { AppDatabase::class.instantiateImpl() }
-    ).setDriver(_root_ide_package_.androidx.sqlite.driver.bundled.BundledSQLiteDriver())
-        .setQueryCoroutineContext(Dispatchers.IO)
-        .build()
+        name = dbFilePath
+    )
+}
+
+@OptIn(ExperimentalForeignApi::class)
+private fun documentDirectory(): String {
+    val documentDirectory = NSFileManager.defaultManager.URLForDirectory(
+        directory = NSDocumentDirectory,
+        inDomain = NSUserDomainMask,
+        appropriateForURL = null,
+        create = false,
+        error = null,
+    )
+    return requireNotNull(documentDirectory?.path)
 }
 
 @Composable

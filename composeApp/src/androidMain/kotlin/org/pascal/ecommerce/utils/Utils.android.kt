@@ -2,8 +2,11 @@ package org.pascal.ecommerce.utils
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Environment
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -12,6 +15,7 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import org.pascal.ecommerce.ContextUtils
+import org.pascal.ecommerce.domain.model.AppInfo
 import java.io.File
 
 actual fun getFileNameFromUri(uri: ByteArray?): String {
@@ -76,3 +80,27 @@ actual fun <T> downloadJson(
         }
     }
 }
+
+fun Context.getAppInfo(): AppInfo {
+    val pm = packageManager
+    val appName = applicationInfo.loadLabel(pm).toString()
+    val versionName = pm.getPackageInfo(packageName, 0).versionName ?: "Unknown"
+    return AppInfo(appName, versionName)
+}
+
+actual fun getAppInfo(): AppInfo {
+    val context = ContextUtils.context
+    return context.getAppInfo()
+}
+
+actual fun showToast(message: String) {
+    val context = ContextUtils.context
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+actual fun isOnline(): Boolean {
+    val context = ContextUtils.context
+    val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = cm.activeNetwork ?: return false
+    val capabilities = cm.getNetworkCapabilities(network) ?: return false
+    return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)}

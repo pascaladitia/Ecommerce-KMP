@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">My Ecommerce</string>
     <string name="cyclone">Cyclone</string>
     <string name="open_github">Open github</string>
     <string name="run">Run</string>
@@ -9,4 +10,39 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="close">Close</string>
+    <string name="product_text_description">
+        Clean lines, versatile and timeless—the people shoe
+ returns with the Nike Air Max 90.
+Featuring the same iconic Waffle sole,
+stitched overlays and classic TPU accents
+ you come to love, it lets you walk among
+ the pantheon of Air. ßNothing as fly,
+nothing as comfortable, nothing as proven.
+The Nike Air Max 90 stays true to its OG running
+ roots with the iconic Waffle sole,
+stitched overlays and classic TPU details.
+Classic colours celebrate your fresh look
+while Max Air cushioning adds comfort to the journey.
+    </string>
+    <string name="connection_offline">Ups, Your connection is offline!</string>
+    <string name="connection_online">Yeay, Your connection is online!</string>
+    <string name="detection_failed">Verified Smile Detection Failed!</string>
+    <string name="detection_success">Verified Smile Detection Success!</string>
+    <string name="login">Log In</string>
+    <string name="google">Google</string>
+    <string name="register">Register</string>
+    <string name="products">Products</string>
+    <string name="our">Our\n</string>
+    <string name="search">Search Product...</string>
+
+    <string name="label_name">Name</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+
+    <string name="hint_name">Input your name</string>
+    <string name="hint_email">Input your email</string>
+    <string name="hint_password">Input your password</string>
+
+    <string name="message_dont_have_account">Don't have an account? Register here!</string>
+    <string name="message_have_account">Have an account? Login here!</string>
 </resources>

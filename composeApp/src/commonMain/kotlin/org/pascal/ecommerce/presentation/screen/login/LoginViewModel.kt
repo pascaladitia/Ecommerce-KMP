@@ -4,52 +4,65 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.pascal.ecommerce.data.preferences.PrefLogin
-import org.pascal.ecommerce.data.repository.BaseRepository
-import org.pascal.ecommerce.domain.model.BaseModel
-import org.pascal.ecommerce.domain.usecase.BaseUseCase
+import org.pascal.ecommerce.domain.usecase.auth.AuthUseCase
+import org.pascal.ecommerce.presentation.screen.login.state.LoginUiState
+import org.pascal.ecommerce.utils.GoogleIdTokenProvider
 import org.pascal.ecommerce.utils.base.EventAction
-import org.pascal.ecommerce.utils.base.UiState
-import org.pascal.ecommerce.utils.base.UiState.Companion.default
-import org.pascal.ecommerce.utils.base.sendEmpty
-import org.pascal.ecommerce.utils.base.sendFailure
-import org.pascal.ecommerce.utils.base.sendLoading
+import org.pascal.ecommerce.utils.base.Result
 import org.pascal.ecommerce.utils.base.sendSuccess
 
 class LoginViewModel(
-    private val baseUseCase: BaseUseCase,
+    private val authUseCase: AuthUseCase,
 ) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(LoginUiState())
+    val uiState = _uiState.asStateFlow()
 
     private val _loginEvent = Channel<EventAction<Boolean>>()
     val loginEvent = _loginEvent
 
-    private val _postApiState = MutableStateFlow<UiState<BaseModel>>(default())
-    val postApiState: StateFlow<UiState<BaseModel>> = _postApiState
+    fun setLoading(b: Boolean) = _uiState.update { it.copy(isLoading = b) }
+    fun setError(show: Boolean, msg: String = "") =
+        _uiState.update { it.copy(isError = show to msg) }
 
-    suspend fun exeLogin(username: String, password: String) {
-        _loginEvent.sendLoading()
+    fun loginEmail(email: String, password: String) = viewModelScope.launch {
+        setLoading(true)
+        when (val res = authUseCase.signInWithEmail(email, password)) {
+            is Result.Success -> {
+                setLoading(false)
 
-        if (username == "test" && password == "123456") {
-            PrefLogin.setIsLogin(true)
-            _loginEvent.sendSuccess(true)
-        } else {
-            _loginEvent.sendFailure("Username atau password salah")
+                PrefLogin.setIsLogin(true)
+                PrefLogin.setLoginResponse(res.data)
+
+                _loginEvent.sendSuccess(true)
+            }
+            is Result.Error -> {
+                setError(true, res.throwable?.message ?: "Login Failed")
+                setLoading(false)
+            }
         }
     }
 
-    fun postApi() {
-        viewModelScope.launch {
-            _postApiState.value = UiState.loading()
-
-            baseUseCase.postApi("")
-                .catch {
-                    _postApiState.value = UiState.fail(it, it.message)
-                }.collect {
-                    _postApiState.value = UiState.success(it)
-                }
+    fun loginGoogle() = viewModelScope.launch {
+        setLoading(true)
+        val token = GoogleIdTokenProvider.getTokens()
+        if (token?.idToken.isNullOrBlank() || token.accessToken.isBlank()) {
+            setError(true, "Google Sign-In Canceled")
+            setLoading(false); return@launch
+        }
+        when (val res = authUseCase.signInWithGoogleIdToken(token.idToken, token.accessToken)) {
+            is Result.Success -> {
+                setLoading(false)
+                _loginEvent.sendSuccess(true)
+            }
+            is Result.Error -> {
+                setError(true, res.throwable?.message ?: "Login Google Failed")
+                setLoading(false)
+            }
         }
     }
 }
