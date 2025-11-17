@@ -94,6 +94,7 @@ kotlin {
             implementation(libs.firebase.auth)
             implementation(libs.firebase.app)
             implementation(libs.firebase.firestore)
+            implementation(libs.swmansion.kmpMaps.core)
         }
 
         commonTest.dependencies {

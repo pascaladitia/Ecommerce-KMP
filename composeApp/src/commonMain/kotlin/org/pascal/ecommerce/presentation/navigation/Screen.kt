@@ -13,4 +13,5 @@ sealed class Screen(val route: String) {
     data object DetailScreen: Screen("detail")
     data object ReportScreen: Screen("report")
     data object VerifiedScreen: Screen("verified")
+    data object MapsScreen: Screen("maps")
 }

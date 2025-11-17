@@ -10,4 +10,5 @@ val LocalProfileEvent = compositionLocalOf { ProfileEvent() }
 data class ProfileEvent(
     val onVerified: () -> Unit = {},
     val onLogout: () -> Unit = {},
+    val onMaps: () -> Unit = {}
 )

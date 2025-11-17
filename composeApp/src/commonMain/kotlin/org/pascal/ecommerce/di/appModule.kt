@@ -41,6 +41,7 @@ import org.pascal.ecommerce.presentation.screen.detail.DetailViewModel
 import org.pascal.ecommerce.presentation.screen.favorite.FavoriteViewModel
 import org.pascal.ecommerce.presentation.screen.home.HomeViewModel
 import org.pascal.ecommerce.presentation.screen.login.LoginViewModel
+import org.pascal.ecommerce.presentation.screen.maps.MapsViewModel
 import org.pascal.ecommerce.presentation.screen.profile.ProfileViewModel
 import org.pascal.ecommerce.presentation.screen.register.RegisterViewModel
 import org.pascal.ecommerce.presentation.screen.report.ReportViewModel
@@ -75,4 +76,5 @@ val appModule = module {
     singleOf(::DetailViewModel)
     singleOf(::ProfileViewModel)
     singleOf(::ReportViewModel)
+    singleOf(::MapsViewModel)
 }

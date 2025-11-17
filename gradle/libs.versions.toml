@@ -34,6 +34,7 @@ firebaseApp = "2.3.0"
 playServicesAuth = "21.4.0"
 googleServices = "4.4.3"
 firebase-bom = "33.5.1"
+kmpMaps = "0.3.0"
 
 [libraries]
 
@@ -89,6 +90,7 @@ firebase-app = { module = "dev.gitlive:firebase-app", version.ref = "firebaseApp
 firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "firebaseApp" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+swmansion-kmpMaps-core = { module = "com.swmansion.kmpmaps:core", version.ref = "kmpMaps" }
 
 [plugins]
 

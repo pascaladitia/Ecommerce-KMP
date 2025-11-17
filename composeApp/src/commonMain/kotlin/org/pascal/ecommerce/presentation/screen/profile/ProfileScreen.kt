@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.CheckCircle
+import compose.icons.feathericons.MapPin
 import compose.icons.feathericons.X
 import ecommerce_kmp.composeapp.generated.resources.Res
 import ecommerce_kmp.composeapp.generated.resources.close
@@ -60,6 +61,7 @@ import org.pascal.ecommerce.presentation.component.button.ButtonComponent
 import org.pascal.ecommerce.presentation.component.dialog.ShowDialog
 import org.pascal.ecommerce.presentation.component.screenUtils.DynamicAsyncImage
 import org.pascal.ecommerce.presentation.component.screenUtils.LoadingScreen
+import org.pascal.ecommerce.presentation.component.screenUtils.noRippleClickable
 import org.pascal.ecommerce.presentation.screen.profile.state.LocalProfileEvent
 import org.pascal.ecommerce.presentation.screen.profile.state.ProfileUIState
 import org.pascal.ecommerce.theme.AppTheme
@@ -70,6 +72,7 @@ fun ProfileScreen(
     paddingValues: PaddingValues,
     viewModel: ProfileViewModel = koinInject<ProfileViewModel>(),
     onVerified: () -> Unit,
+    onMaps: () -> Unit,
     onLogout: () -> Unit
 ) {
     val coroutine = rememberCoroutineScope()
@@ -85,9 +88,8 @@ fun ProfileScreen(
 
     CompositionLocalProvider(
         LocalProfileEvent provides event.copy(
-            onVerified = {
-                onVerified()
-            },
+            onVerified = onVerified,
+            onMaps = onMaps,
             onLogout = {
                 coroutine.launch {
                     viewModel.loadLogout()
@@ -180,6 +182,27 @@ fun ProfileContent(
                         color = Color.Gray
                     )
                 }
+            }
+
+            Row(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .noRippleClickable { event.onMaps() },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = FeatherIcons.MapPin,
+                    contentDescription = null,
+                    tint = Color.Red
+                )
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                Text(
+                    text = "Address",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
 
             if (!uiState.isVerified) {

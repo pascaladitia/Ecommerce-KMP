@@ -14,6 +14,7 @@ import org.pascal.ecommerce.presentation.screen.detail.DetailScreen
 import org.pascal.ecommerce.presentation.screen.favorite.FavoriteScreen
 import org.pascal.ecommerce.presentation.screen.home.HomeScreen
 import org.pascal.ecommerce.presentation.screen.login.LoginScreen
+import org.pascal.ecommerce.presentation.screen.maps.MapsScreen
 import org.pascal.ecommerce.presentation.screen.profile.ProfileScreen
 import org.pascal.ecommerce.presentation.screen.register.RegisterScreen
 import org.pascal.ecommerce.presentation.screen.report.ReportScreen
@@ -117,6 +118,9 @@ fun RouteScreen(
                     onVerified = {
                         navController.navigate(Screen.VerifiedScreen.route)
                     },
+                    onMaps = {
+                        navController.navigate(Screen.MapsScreen.route)
+                    },
                     onLogout = {
                         navController.popBackStack()
                         navController.navigate(Screen.LoginScreen.route) {
@@ -144,6 +148,15 @@ fun RouteScreen(
                     onNavBack = {
                         navController.popBackStack()
                         navController.navigate(Screen.HomeScreen.route)
+                    }
+                )
+            }
+            composable(route = Screen.MapsScreen.route) {
+                MapsScreen(
+                    paddingValues = paddingValues,
+                    onNavBack = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.ProfileScreen.route)
                     }
                 )
             }
